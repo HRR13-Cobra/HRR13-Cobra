@@ -40,6 +40,7 @@ module.exports = {
         res.status(200).send('ok');
       } else {
         res.status(404).send('Cannot remove message');
+
         console.log('Cannot remove message');
       }
     });
@@ -49,10 +50,12 @@ module.exports = {
       if (err) {
         res.send('failed');
       } else {
+
         console.log(req.body);
         trip.destination = req.body.destination;
         trip.startDate = req.body.startDate;
         res.status(201).send('modified');
+
         // trip.save(function(err) {
         //   if(err) console.log('cannot save trip');
         //   res.send('trip modified');
