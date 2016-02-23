@@ -6,10 +6,9 @@ var secret = 'the cobra command';
 module.exports = {
 
   authorize: function (req, res, next){
-
-    // console.log('Auth is being called...');
     var token = req.body.token || req.headers['x-access-token'];
-    // console.log('header is... '+req.headers['x-access-token']);
+    //console.log('header is... '+req.headers['x-access-token']);
+
     if(token){
       // console.log(secret + 'is secret');
       jwt.verify(token, secret, function(err, decoded){
@@ -26,7 +25,6 @@ module.exports = {
     }
   }, 
   createToken: function (user){
-
     return jwt.sign(_.omit(user, 'password'),secret,{
       expiresIn: 24 * 60 * 60
     })
