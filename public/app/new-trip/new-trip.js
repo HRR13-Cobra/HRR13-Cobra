@@ -7,7 +7,6 @@ angular.module('app.new-trip', [])
     Trips.newTrip(destination, startDate)
       .then(function(response) {
       	var tripID = response.data.trips.pop()._id;
-		$location.path('/trips/' + tripID);
       })
   };
 

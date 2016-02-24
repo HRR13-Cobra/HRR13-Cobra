@@ -3,7 +3,7 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var config = require('./config/middleware.js');
 //create connection to database
-
+// mongoose.connect('mongodb://cobras:cobras123@ds047065.mongolab.com:47065/tripplanner');
 mongoose.connect('mongodb://127.0.0.1:27017/tripplanner');
 
 // test on saving a user to database
