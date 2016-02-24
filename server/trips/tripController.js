@@ -3,9 +3,8 @@ var authController = require('./../config/authController.js');
 var UserModel = require('./../users/userModel.js');
 
 module.exports = {
-  create: function(req, res, body) {
+  create: function(req, res, body){
 
-    console.log('create trip',req.body);
     var newTrip = Trip({
       destination: req.body.destination,
       startDate: req.body.startDate,
@@ -28,7 +27,7 @@ module.exports = {
           function(err, saved) {
             if (err) console.error(err);
             else {
-              res.status(201).send(saved);
+              res.status(201).send(savedTrip);
               console.log(saved);
             }
           }
