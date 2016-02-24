@@ -3,10 +3,9 @@ var authController = require('./../config/authController.js');
 var UserModel = require('./../users/userModel.js');
 
 module.exports = {
-  create: function(req, res, body){
-
+  create: function(req, res){
+    console.log(req.body);
     var newTrip = Trip({
-      userId: req.decoded._id,
       destination: req.body.destination,
       startDate: req.body.startDate,
     });
@@ -19,12 +18,13 @@ module.exports = {
         // TODO: save trip objectID to user document in session
         console.log('Trip saved, ID: ' + savedTrip._id);
         UserModel.findOneAndUpdate(
-          {_id: req.decoded._id},
+          {_id: savedTrip._id},
           {$push:{"trips": savedTrip}}, 
           function(err, saved) {
             if(err) console.error(err);
             else {
               res.status(201).send(saved);
+              console.log(saved);
             }
           }
           )
@@ -71,5 +71,5 @@ module.exports = {
         res.status(403).send('Trip not found');
       });
 
-  }
+  },
 };

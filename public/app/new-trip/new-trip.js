@@ -6,7 +6,7 @@ angular.module('app.new-trip', [])
   	console.log($window.localStorage.getItem('com.tp'));
     Trips.newTrip(destination, startDate)
       .then(function(data) {
-        $location.path('#/my-trip/')
+        // $location.path('#/my-trip/')
       })
   };
 
