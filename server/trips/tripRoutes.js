@@ -1,9 +1,11 @@
 var tripController = require('./tripController.js');
 var authController = require('./../config/authController.js');
-
+var express = require('express');
 module.exports = function(app) {
-  app.post('/create',authController.authorize, tripController.create);
+  // FIXME: restore auth for create
+  app.post('/create', tripController.create);
   app.post('/remove',authController.authorize, tripController.remove);
   app.put('/modify/',authController.authorize, tripController.modify);
   app.get('/:tripId', tripController.getTripView);
+
 };
