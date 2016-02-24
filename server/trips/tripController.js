@@ -4,9 +4,8 @@ var UserModel = require('./../users/userModel.js');
 
 module.exports = {
   create: function(req, res, body){
-
+    console.log(req.body);
     var newTrip = Trip({
-      userId: req.decoded._id,
       destination: req.body.destination,
       startDate: req.body.startDate,
     });
@@ -19,12 +18,13 @@ module.exports = {
         // TODO: save trip objectID to user document in session
         console.log('Trip saved, ID: ' + savedTrip._id);
         UserModel.findOneAndUpdate(
-          {_id: req.decoded._id},
+          {_id: savedTrip._id},
           {$push:{"trips": savedTrip}}, 
           function(err, saved) {
             if(err) console.error(err);
             else {
               res.status(201).send(saved);
+              console.log(saved);
             }
           }
           )
@@ -40,6 +40,7 @@ module.exports = {
         res.status(200).send('ok');
       } else {
         res.status(404).send('Cannot remove message');
+
         console.log('Cannot remove message');
       }
     });
@@ -49,10 +50,12 @@ module.exports = {
       if (err) {
         res.send('failed');
       } else {
+
         console.log(req.body);
         trip.destination = req.body.destination;
         trip.startDate = req.body.startDate;
         res.status(201).send('modified');
+
         // trip.save(function(err) {
         //   if(err) console.log('cannot save trip');
         //   res.send('trip modified');
@@ -71,5 +74,5 @@ module.exports = {
         res.status(403).send('Trip not found');
       });
 
-  }
+  },
 };
