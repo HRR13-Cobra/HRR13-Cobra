@@ -15,6 +15,18 @@
           console.log(data);
           address = data.results[1].formatted_address;
 
+          var req = {
+            // FIXME: server side is not receiving trip information
+            token: window.localStorage.getItem('com.tp'),
+            destination: address,
+          }
+          console.log(address);
+          $.ajax('http://localhost:3000/api/trips/create', {
+            'data': JSON.stringify(req),
+            'type': 'POST',
+            'processData': false,
+            'contentType': 'application/json'
+          })
           // place marker
           var marker = new google.maps.Marker({
             map: map,
@@ -23,20 +35,10 @@
             position:data.results[0].geometry.location,
             animation: google.maps.Animation.DROP
           });
+            $('#userList').append($('<li>'+address+'</li>'))
         });
 
-          var req = {
-            // FIXME: server side is not receiving trip information
-            // token: window.localStorage.getItem('com.tp'),
-            destination: address,
-          }
-          console.log(address);
-          $.post('http://localhost:3000/api/trips/create', req, function(data) {
-            console.log('req is ' + req);
-            console.log(data);
-          },"json");
 
-            $('#userList').append($('<li>'+address+'</li>'))
    })
   }
     
