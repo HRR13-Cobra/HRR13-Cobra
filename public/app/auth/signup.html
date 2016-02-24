@@ -3,7 +3,7 @@
   <form class="center-align" name="signupForm" ng-submit='signup()'>
     <input placeholder="username" type='text' ng-model='user.username' required>
     <input placeholder="password" type="password" ng-model='user.password' required>
-    <button class="waves-effect waves-light btn" ng-disabled='signupForm.$invalid'>signup</button>
+    <button class="waves-effect waves-light btn amber darken-3" ng-disabled='signupForm.$invalid'>signup</button>
   </form>
   <!-- if invalid is true, show a div that says, your login is invalid. -->
   <!-- <h3 ng-if="$scope.user.invalid">You aint signed up yet fool!</h3> -->
