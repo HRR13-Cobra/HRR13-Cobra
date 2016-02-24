@@ -48,8 +48,7 @@ angular.module('app.services', [])
         data: mydata
       })
       .then(function(data) {
-        console.log(data);
-        tripID = data._id;
+        return data;
       });
   };
 

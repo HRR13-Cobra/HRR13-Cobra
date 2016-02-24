@@ -5,8 +5,10 @@ angular.module('app.new-trip', [])
   $scope.createTrip = function(destination, startDate) {
   	console.log($window.localStorage.getItem('com.tp'));
     Trips.newTrip(destination, startDate)
-      .then(function(data) {
-        // $location.path('#/my-trip/')
+      .then(function(response) {
+      	var tripID = response.data.trips.pop()._id;
+		$location.path('/trips/' + tripID);
+
       })
   };
 
