@@ -3,7 +3,7 @@ var authController = require('./../config/authController.js');
 var UserModel = require('./../users/userModel.js');
 
 module.exports = {
-  create: function(req, res){
+  create: function(req, res, body){
     console.log(req.body);
     var newTrip = Trip({
       destination: req.body.destination,
