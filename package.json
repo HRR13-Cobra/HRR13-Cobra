@@ -2,7 +2,7 @@
   "name": "trip_planner",
   "version": "0.0.1",
   "description": "Travel planning site.",
-  "main": "index.js",
+  "main": "server/server.js",
   "scripts": {
     "test": "npm test"
   },
@@ -19,9 +19,7 @@
   "dependencies": {
     "angular": "^1.5.0",
     "angular-ui-router": "^0.2.18",
-    "bcrypt": "0.8.5",
     "bcrypt-nodejs": "0.0.3",
-    "bcryptjs": "^2.3.0",
     "body-parser": "^1.15.0",
     "cookie-parser": "^1.4.1",
     "express": "^4.13.4",
