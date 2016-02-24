@@ -1,13 +1,14 @@
 <div id='signin'>
-  <h1>signin</h1>
-  <form name="signinForm" ng-submit='signin()'>
-    <input type='text' ng-model='user.username' required>
-    <input type="password" ng-model='user.password' required>
-    <button ng-disabled='signinForm.$invalid'>signin</button>
+  <h1 class="center-align">Signin</h1>
+  <form class="center-align" name="signinForm" ng-submit='signin()'>
+    <input placeholder="username" type='text' ng-model='user.username' required>
+    <input placeholder="password" type="password" ng-model='user.password' required>
+    <button class="waves-effect waves-light btn" ng-disabled='signinForm.$invalid'>signin</button>
   </form>
   <!-- if invalid is true, show a div that says, your login is invalid. -->
   <!-- <h3 ng-if="$scope.user.invalid">You aint signed up yet fool!</h3> -->
-  <a href="#/signup">Don't have an account?
+ 
+ <!--  <a href="#/signup">Don't have an account?
     <strong>Signup</strong>
-    ...</a>
+    ...</a> -->
 </div>
