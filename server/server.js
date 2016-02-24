@@ -22,6 +22,9 @@ var app = express();
 // configures our server to run with our middleware and routes
 config(app, express);
 
-//Digital Ocean has site hosted on 80, with a virtual proxy to resolve to 8080.
-app.listen(8080);
-console.log('listening on 8080');
+
+// FIXME: add dynamic port before deployment (process.env.NODE_ENV)
+app.listen(3000, function() {
+  console.log('listening on port 3000...');
+});
+
