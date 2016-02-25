@@ -1,5 +1,4 @@
 
-
 <div>
   <h2>The world is yours to explore...</h2>
   <!-- Desination -->
@@ -18,5 +17,18 @@
     <button class="waves-effect waves-light btn amber darken-3" class="md-raised" type="submit" name="action" ng-disabled="!destination" ng-click="createTrip(destination, startDate)">Submit
     </button>
   </div>
+   <div id="mapDiv"></div>
+
 
 </div>
+
+  <style type="text/css">
+/*    html { height: 100%;}
+    body {height :100%; margin:0; padding: 0;}*/
+    #mapDiv {
+
+      height:600px;
+      width: 100%;
+    }
+    /*#userList {height:100%; width:100px; float:left; padding: 10px;}*/
+  </style>

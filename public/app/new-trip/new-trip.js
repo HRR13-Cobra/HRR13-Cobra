@@ -3,6 +3,10 @@ angular.module('app.new-trip', [])
 .controller('new-tripController', function($scope, $location, $window, Trips) {
 
   $scope.trip = {};
+  $scope.map;
+  $scope.geocoder = new google.maps.Geocoder();
+  $scope.markers = {};
+  $scope.address;
 
   // $scope.getTripData = function(destination, startDate){
   //   Trips.newTrip(destination, startDate)
@@ -11,7 +15,6 @@ angular.module('app.new-trip', [])
   //       console.log($scope.trip)
   //     })
   // }
-
 
 
   $scope.createTrip = function(destination, startDate) {
@@ -30,4 +33,40 @@ angular.module('app.new-trip', [])
       // })
   };
 
+  var mapOptions = {
+        // start in USA
+    center: new google.maps.LatLng(37.09024, -95.712891),
+    zoom: 5
+  };
+  $scope.map = new google.maps.Map(document.getElementById("mapDiv"), mapOptions);
+  $scope.map.addListener('click', function(e) {
+        $.get("https://maps.googleapis.com/maps/api/geocode/json?latlng="+e.latLng.lat()+","+e.latLng.lng()+"&key=AIzaSyCXPMP0KsMOdfwehnmOUwu-W3VOK92CkwI", function(data) {
+          console.log(data);
+          address = data.results[1].formatted_address;
+
+          var req = {
+            // FIXME: server side is not receiving trip information
+            token: window.localStorage.getItem('com.tp'),
+            destination: address,
+          }
+          console.log(address);
+          $.ajax('http://localhost:3000/api/trips/create', {
+            'data': JSON.stringify(req),
+            'type': 'POST',
+            'processData': false,
+            'contentType': 'application/json'
+          })
+          // place marker
+          var marker = new google.maps.Marker({
+            map: $scope.map,
+            // FIXME: address does not update after dropping marker
+            draggable: true,
+            position:data.results[0].geometry.location,
+            animation: google.maps.Animation.DROP
+          });
+            $('#userList').append($('<li>'+address+'</li>'))
+        });
+
+
+   })
 });
