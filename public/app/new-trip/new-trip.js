@@ -5,7 +5,7 @@ angular.module('app.new-trip', [])
   $scope.map;
   $scope.geocoder = new google.maps.Geocoder();
   $scope.destination;
-  var allTrips;
+  // var allTrips;
   var coordinates = {};
 
   var createMarker = function (info) {
@@ -14,6 +14,17 @@ angular.module('app.new-trip', [])
       position: info.coordinates,
       destination: info.destination
     });
+    marker.addListener('dblclick', function() {
+      console.log('double clicking...');
+      Trips.removeTrip(marker.destination);
+      marker.setMap(null);
+    });
+    var infowindow = new google.maps.InfoWindow({
+      content: info.destination,
+    })
+    // marker.addListener('click', function() {
+    //   infowindow.open(marker.get('map'), marker);
+    // })
   }
 
   $scope.showTrips = function(user) {
@@ -24,10 +35,7 @@ angular.module('app.new-trip', [])
         $scope.trips.forEach(function(trip) {
           if(trip.coordinates) createMarker(trip);
       });
-
     });
-
-
   };
   $scope.showTrips(Trips.user);
 
@@ -36,11 +44,10 @@ angular.module('app.new-trip', [])
   	// console.log($window.localStorage.getItem('com.tp'));
 
     Trips.newTrip(destination, startDate, coordinates);
-
   };
 
   var mapOptions = {
-        // start in USA
+    // start in USA
     center: new google.maps.LatLng(37.09024, -95.712891),
     zoom: 5
   };
@@ -55,8 +62,6 @@ angular.module('app.new-trip', [])
       $scope.destination =  data.results[1].formatted_address;
       coordinates.lat = data.results[0].geometry.location.lat;
       coordinates.lng = data.results[0].geometry.location.lng;
-
-      console.log(coordinates);
 
       var req = {
         // FIXME: server side is not receiving trip information
@@ -78,17 +83,21 @@ angular.module('app.new-trip', [])
     });
    })
   $scope.geocodeAddress = function () {
-    console.log('scope', $scope.destination);
     $scope.geocoder.geocode({'address':$scope.destination},
       function(results, status) {
+        var tempInfo;
         // TODO: remove redundant code with add event listener
         if(status === google.maps.GeocoderStatus.OK) {
           $scope.map.setCenter(results[0].geometry.location);
+          tempInfo = {
+            destination: $scope.destination, 
+            position: results[0].geometry.location
+          }
+          createMarker(tempInfo);
           var marker = new google.maps.Marker({
             map: $scope.map,
             position: results[0].geometry.location,
           });
-          console.log(results)
           coordinates.lat = results[0].geometry.location.lat();
           coordinates.lng = results[0].geometry.location.lng();
           $scope.destination = results[0].formatted_address;

@@ -81,7 +81,7 @@ module.exports = {
         'userId': req.decoded.username
       })
       .then(function(results) {
-        console.log(results);
+        // console.log(results);
         res.send(results);
       })
       .catch(function(err) {

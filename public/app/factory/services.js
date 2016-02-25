@@ -57,6 +57,17 @@ angular.module('app.services', [])
       });
   };
 
+  var removeTrip = function(target) {
+    return $http({
+      method: 'POST',
+      url: 'api/trips/remove',
+      data: {'destination': target}
+    })
+    .then(function(results) {
+      console.log(results);
+    })
+  };
+
   var addDetails = function(tripID, title, details) {
     var tripData = {
       _id: tripID,
@@ -77,7 +88,8 @@ angular.module('app.services', [])
     newTrip: newTrip,
     trips: trips,
     tripID: tripID,
-    addDetails: addDetails
+    addDetails: addDetails,
+    removeTrip: removeTrip
   };
 
 })
