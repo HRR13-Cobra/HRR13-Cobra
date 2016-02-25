@@ -37,6 +37,7 @@ angular.module('app.new-trip', [])
       createContent(info),
     });
     marker.addListener('click', function(){
+      console.log('adding');
       infowindow.open(marker.get('map'), marker);
     })
   }
@@ -55,9 +56,9 @@ angular.module('app.new-trip', [])
   $scope.showTrips(Trips.user);
 
 
-  $scope.createTrip = function(destination, startDate, coordinates) {
-    Trips.newTrip(destination, startDate, coordinates);
-  };
+  // $scope.createTrip = function(destination, startDate, coordinates) {
+  //   Trips.newTrip(destination, startDate, coordinates, cb);
+  // };
 
   var mapOptions = {
     // start in USA
@@ -102,19 +103,19 @@ angular.module('app.new-trip', [])
           $scope.map.setCenter(results[0].geometry.location);
           tempInfo = {
             destination: $scope.destination, 
-            position: results[0].geometry.location
+            coordinates: {
+              lat: results[0].geometry.location.lat(),
+              lng: results[0].geometry.location.lng()
+            },
+            POI: [],
           }
-          createMarker(tempInfo);
-          var marker = new google.maps.Marker({
-            map: $scope.map,
-            position: results[0].geometry.location,
-          });
-          coordinates.lat = results[0].geometry.location.lat();
-          coordinates.lng = results[0].geometry.location.lng();
           $scope.destination = results[0].formatted_address;
-          $scope.createTrip($scope.destination, Date.now(), coordinates)
+          Trips.newTrip(tempInfo.destination, Date.now(), tempInfo.coordinates, function(data) {
+            tempInfo._id = data;
+            createMarker(tempInfo);
+          })
           $scope.map.setZoom(6);
-          $scope.map.panTo(marker.position)
+          $scope.map.panTo(tempInfo.position)
         } else {
           console.log('error')
         }
