@@ -1,10 +1,8 @@
 var Trip = require('./tripModel.js');
 
 module.exports = {
-
   create: function(req, res) {
     var newTrip = new Trip({
-
       destination: req.body.destination,
       startDate: req.body.startDate,
       userId: req.decoded.username,
@@ -34,7 +32,6 @@ module.exports = {
         //     }
         //   }
         // )
-
       }
     });
   },
