@@ -4,7 +4,6 @@ var UserModel = require('./../users/userModel.js');
 
 module.exports = {
   create: function(req, res, body){
-
     var newTrip = Trip({
       destination: req.body.destination,
       startDate: req.body.startDate,
@@ -28,7 +27,7 @@ module.exports = {
             if (err) console.error(err);
             else {
               res.status(201).send(savedTrip);
-              console.log(saved);
+              // console.log(saved);
             }
           }
         )
