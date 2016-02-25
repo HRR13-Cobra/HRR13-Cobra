@@ -1,4 +1,4 @@
-var Trip = require('./tripModel.js');
+vaTrip = require('./tripModel.js');
 
 module.exports = {
   create: function(req, res) {

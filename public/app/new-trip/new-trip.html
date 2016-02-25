@@ -7,14 +7,13 @@
     <label>Where are you going?</label>
     <input class="validate" ng-model="destination">
   </md-input-container>
-
   <div>
     <h4>When does your trip start? (Optional)</h4>
     <md-datepicker ng-model="myDate" md-placeholder="Enter date" ng-model="startDate"></md-datepicker>
   </div>
 
   <div>
-    <button class="waves-effect waves-light btn amber darken-3" class="md-raised" type="submit" name="action" ng-disabled="!destination" ng-click="createTrip(destination, startDate)">Submit
+    <button class="waves-effect waves-light btn amber darken-3" class="md-raised" type="submit" name="action" ng-disabled="!destination" ng-click="submitForm()">Submit
     </button>
   </div>
    <div id="mapDiv"></div>
