@@ -5,26 +5,27 @@ angular.module('app.new-trip', [])
   $scope.map;
   $scope.geocoder = new google.maps.Geocoder();
   $scope.destination;
-  // var allTrips;
   var coordinates = {};
 
-  // var createContent = function(info) {
-  //   var template = $('<div></div>');
-  //   info.POI.forEach(function(point){
-  //     if(point.title && point.detail){
-  //       template.append('<h4>'+point.title+'</h4>'+'<li>'+point.detail+'</li>');
-  //       console.log(template);
-  //     }
-  //   });
-  //   return $(template);
-  // }
+  var createContent = function(info) {
+    var string = '';
+    if (info.POI.length > 0) {
+      info.POI.forEach(function(point) {
+        // console.log(point);
+        string += '<strong>' + (point.title? point.title: '') + ':</strong> ' + (point.details? point.details: '') + '<br>';
+      });
+    }
+    return string;
+  }
 
   var createMarker = function (info) {
+    // console.log(info);
     // console.log(info);
     var marker = new google.maps.Marker({
       map: $scope.map,
       position: info.coordinates,
-      destination: info.destination
+      destination: info.destination,
+      animation: google.maps.Animation.DROP,
     });
     marker.addListener('dblclick', function() {
       console.log('double clicking...');
@@ -32,7 +33,8 @@ angular.module('app.new-trip', [])
       marker.setMap(null);
     });
     var infowindow = new google.maps.InfoWindow({
-      content: '<a href="http://localhost:3000/#/my-trip/'+info._id+'">'+info.destination+'</a>',
+      content: '<a href="http://localhost:3000/#/my-trip/'+info._id+'">'+info.destination+'</a><br>' + 
+      createContent(info),
     });
     marker.addListener('click', function(){
       infowindow.open(marker.get('map'), marker);
@@ -43,7 +45,7 @@ angular.module('app.new-trip', [])
     Trips.allTrips(user)
       .then(function(data) {
         $scope.trips = data;
-        console.log($scope.trips);
+        // console.log($scope.trips);
         $scope.trips.forEach(function(trip) {
           // console.log(trip);
           if(trip.coordinates) createMarker(trip);
@@ -54,7 +56,6 @@ angular.module('app.new-trip', [])
 
 
   $scope.createTrip = function(destination, startDate, coordinates) {
-
     Trips.newTrip(destination, startDate, coordinates);
   };
 
@@ -67,12 +68,12 @@ angular.module('app.new-trip', [])
   // create map 
   $scope.map = new google.maps.Map(document.getElementById("mapDiv"), mapOptions);
 
-
   $scope.map.addListener('click', function(e) {
     var info = {
       _id: null,
       coordinates: null,
       destination: null,
+      POI: [],
     };
 
     $.get("https://maps.googleapis.com/maps/api/geocode/json?latlng="+e.latLng.lat()+","+e.latLng.lng()+"&key=AIzaSyCXPMP0KsMOdfwehnmOUwu-W3VOK92CkwI", function(data) {
@@ -82,11 +83,6 @@ angular.module('app.new-trip', [])
       coordinates.lng = data.results[0].geometry.location.lng;
       info.coordinates = data.results[0].geometry.location;
       info.destination = $scope.destination;
-      // var req = {
-      //   // FIXME: server side is not receiving trip information
-      //   token: window.localStorage.getItem('com.tp'),
-      //   destination: $scope.destination,
-      // }
 
       // @Date.now as a placeholder since server requires dates
       Trips.newTrip(info.destination, Date.now(), info.coordinates, function(id) {
@@ -94,20 +90,13 @@ angular.module('app.new-trip', [])
         createMarker(info);
 
       });
-      // place marker
-      // var marker = new google.maps.Marker({
-      //   map: $scope.map,
-      //   // FIXME: address does not update after dropping marker
-      //   // draggable: true,
-      //   position:data.results[0].geometry.location,
-      //   animation: google.maps.Animation.DROP
-      // });
     });
    })
   $scope.geocodeAddress = function () {
     $scope.geocoder.geocode({'address':$scope.destination},
       function(results, status) {
         var tempInfo;
+
         // TODO: remove redundant code with add event listener
         if(status === google.maps.GeocoderStatus.OK) {
           $scope.map.setCenter(results[0].geometry.location);
@@ -134,8 +123,5 @@ angular.module('app.new-trip', [])
 
   $scope.submitForm = function(){
     $scope.geocodeAddress();
-    // $scope.createTrip($scope.destination, Date.now());
   }
-
-
 });
