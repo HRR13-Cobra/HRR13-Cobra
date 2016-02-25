@@ -38,10 +38,11 @@ angular.module('app.services', [])
       });
   };
 
-  var newTrip = function(destination, startDate) {
+  var newTrip = function(destination, startDate, coordinates) {
     var mydata = {
       destination: destination,
-      startDate: startDate
+      startDate: startDate,
+      coordinates: coordinates
     };
     return $http({
         method: 'POST',
@@ -49,8 +50,9 @@ angular.module('app.services', [])
         data: mydata
       })
       .then(function(data) {
-        console.log('Trip ID...',data.data._id);
-        tripID = data.data._id;
+        console.log(data);
+        console.log('Trip ID...',data.data);
+        tripID = data.data;
 
       });
   };

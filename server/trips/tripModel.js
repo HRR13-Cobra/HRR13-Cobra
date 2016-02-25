@@ -4,7 +4,8 @@ var TripSchema = new mongoose.Schema({
   destination: String,
   userId: String,
   startDate: Date,
-  POI: Array
+  POI: Array,
+  coordinates: Object
 });
 
 module.exports = mongoose.model('trips', TripSchema);

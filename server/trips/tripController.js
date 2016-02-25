@@ -7,7 +7,8 @@ module.exports = {
       destination: req.body.destination,
       startDate: req.body.startDate,
       userId: req.decoded.username,
-      POI: []
+      POI: [],
+      coordinates: req.body.coordinates,
     });
     console.log('newTrip', newTrip);
     newTrip.save(function(err, savedTrip) {
