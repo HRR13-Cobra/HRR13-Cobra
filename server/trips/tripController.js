@@ -1,6 +1,7 @@
 vaTrip = require('./tripModel.js');
 
 module.exports = {
+
   create: function(req, res) {
     var newTrip = new Trip({
       destination: req.body.destination,
@@ -15,6 +16,7 @@ module.exports = {
         console.log(err);
       } else {
         // TODO: save trip objectID to user document in session
+
         console.log('Trip saved, ID: ' + savedTrip._id);
         res.status(201).send(savedTrip._id);
         // UserModel.findOneAndUpdate({

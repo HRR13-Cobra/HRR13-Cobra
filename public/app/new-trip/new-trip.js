@@ -16,7 +16,6 @@ angular.module('app.new-trip', [])
   //     })
   // }
 
-
   $scope.createTrip = function(destination, startDate) {
   	// console.log($window.localStorage.getItem('com.tp'));
 
