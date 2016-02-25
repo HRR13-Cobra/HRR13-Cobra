@@ -15,7 +15,7 @@ module.exports = {
         console.log(err);
       } else {
         // TODO: save trip objectID to user document in session
-        console.log('Trip saved, ID: ' + savedTrip._id);
+        console.log('Trip saved, ID: ' + savedTrip);
         UserModel.findOneAndUpdate({
             _id: savedTrip._id
           }, {
