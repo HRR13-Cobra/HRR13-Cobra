@@ -38,7 +38,7 @@ angular.module('app.services', [])
       });
   };
 
-  var newTrip = function(destination, startDate, coordinates) {
+  var newTrip = function(destination, startDate, coordinates, cb) {
     var mydata = {
       destination: destination,
       startDate: startDate,
@@ -50,8 +50,8 @@ angular.module('app.services', [])
         data: mydata
       })
       .then(function(data) {
-        console.log(data);
         console.log('Trip ID...',data.data);
+        cb(data.data);
         tripID = data.data;
 
       });

@@ -20,21 +20,6 @@ module.exports = {
 
         console.log('Trip saved, ID: ' + savedTrip._id);
         res.status(201).send(savedTrip._id);
-        // UserModel.findOneAndUpdate({
-        //     _id: savedTrip._id
-        //   }, {
-        //     $push: {
-        //       "trips": savedTrip
-        //     }
-        //   },
-        //   function(err, saved) {
-        //     if (err) console.error(err);
-        //     else {
-        //       res.status(201).send(saved);
-        //       console.log(saved);
-        //     }
-        //   }
-        // )
       }
     });
   },
