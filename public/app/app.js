@@ -35,6 +35,11 @@ angular.module('tp', [
         templateUrl: 'app/auth/signup.html',
         controller: 'AuthController'
       })
+      .when('/profile', {
+        authenticate: true,
+        templateUrl: 'app/auth/profile.html',
+        controller: 'AuthController'
+      })
       .when('/signout', {
         templateUrl: 'app/auth/signin.html',
         controller: 'AuthController'

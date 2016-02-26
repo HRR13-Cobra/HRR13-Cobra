@@ -12,7 +12,10 @@ var UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  salt: String
+  salt: String,
+  address: {type: String},
+  phone: {type: String},
+  
 });
 
 UserSchema.methods = {
