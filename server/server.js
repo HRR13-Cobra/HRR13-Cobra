@@ -40,13 +40,12 @@ var Trip = require('./trips/tripModel.js');
 // });
 
 
-
-
 var app = express();
 
 // configures our server to run with our middleware and routes
 config(app, express);
 
+//this better stay on 8080 or so help me....
 app.listen(8080, function() {
   console.log('listening on port 8080...');
 });
