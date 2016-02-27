@@ -45,7 +45,7 @@ angular.module('app.services', [])
         data: {
           destination: destination,
           startDate: startDate,
-          coordinates: coordinates
+          coordinates: coordinates,
         }
       })
       .then(function(data) {

@@ -36,7 +36,7 @@
         <label>(Optional)</label>
         <input type="date" ng-model="startDate" class="datepicker">
       </div>
-      <div class="col s12">
+      <div class="col s6">
         <button
           class="waves-effect waves-light btn amber darken-3"
           class="md-raised"
@@ -46,9 +46,23 @@
           ng-click="createTrip()">Submit
         </button>
         <p> </p>
+      </div>  <div class="col s6">
+        <button
+          class="waves-effect waves-light btn amber darken-3"
+          class="md-raised"
+          ng-click="quickAdd()"
+          >Quick Add
+        </button>
+        <p> </p>
       </div>
     </div>
   </form>
   <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+  <div class="row">
+    <h5 class="col s10"id="questionsID" ng-model="questions" ng-show="showQuestion">{{questions}}</h5>
+    <div class="right-align">
+      <button ng-show="showQuestion" class="waves-light waves-effect btn amber darken-5 md-raised">N/A</button>
+    </div>
+  </div>
   <div id="mapDiv"></div>
 </div>
