@@ -67,7 +67,15 @@ angular.module('app.services', [])
         return results;
       });
   };
-
+  var requestAttractions = function (location) {
+    return $http({
+      method: 'GET',
+      url: 'api/trips/yelp/' + location.replace(' ', '_'),
+    }).then(function (results) {
+      console.log(results);
+      return results;
+    })
+  }
   var addPOI = function(tripID, title, details) {
     var tripData = {
       _id: tripID,
@@ -80,6 +88,19 @@ angular.module('app.services', [])
       data: tripData
     });
   };
+
+  var deletePOI = function(tripID, title, details) {
+    var tripData = {
+      _id: tripID,
+      title: title,
+      details: details,
+    };
+    return $http({
+      method: 'DELETE',
+      url: '/api/trips/poi',
+      data: tripData
+    });
+  }
   //someone please refactor me!!!!
   var addTrigger = function(tripID, string, value) {
     var tripData = {};
@@ -114,6 +135,7 @@ angular.module('app.services', [])
     });
   };
   return {
+    requestAttractions: requestAttractions,
     allTrips: allTrips,
     accessTrip: accessTrip,
     newTrip: newTrip,

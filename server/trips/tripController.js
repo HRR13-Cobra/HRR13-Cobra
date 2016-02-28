@@ -82,4 +82,9 @@ module.exports = {
       });
 
   },
+  removePOI: function(req, res) {
+    console.log('removing poi');
+    console.log(req.body);
+    res.status(200).send('sup');
+  }
 };

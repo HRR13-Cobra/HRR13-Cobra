@@ -34,10 +34,27 @@ angular.module('app.my-trip', [])
         $route.reload();
       });
   };
-  
 
   $scope.signout = function() {
     Auth.signout();
   };
 
+  $scope.editedSights = null;
+
+  $scope.newSights = function(){ 
+    $scope.Sights.push({name:"new record"});
+  }
+
+  $scope.startEditing = function(Sights){
+    console.log('start editing');
+    Sights.editing=true;
+    $scope.editedSights = Sights;
+    console.log(Sights, $scope.editedSights);
+  }
+      
+  $scope.doneEditing = function(Sights){
+    
+    Sights.editing=false;
+    $scope.editedSights = null;
+  }
 })

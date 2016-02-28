@@ -1,5 +1,6 @@
 var tripController = require('./tripController.js');
 var authController = require('./../config/authController.js');
+var yelp = require('./yelpAPI');
 var express = require('express');
 
 module.exports = function(app) {
@@ -9,5 +10,7 @@ module.exports = function(app) {
   app.put('/modify/',authController.authorize, tripController.modify);
   app.put('/modify2/',authController.authorize, tripController.modify2);
   app.get('/:tripId', tripController.getTripView);
+  app.get('/yelp/:city', yelp.getPOI);
+  app.delete('/poi', tripController.removePOI);
 
 };
