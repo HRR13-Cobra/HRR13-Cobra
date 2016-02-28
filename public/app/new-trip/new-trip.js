@@ -15,12 +15,21 @@ angular.module('app.new-trip', [])
     Auth.signout();
   };
 
-  $scope.map;
+  var mapOptions = {
+    // start in USA
+    center: new google.maps.LatLng(37.09024, -95.712891),
+    zoom: 5
+  };
+
+  $scope.map = new google.maps.Map(document.getElementById("mapDiv"), mapOptions);
   $scope.geocoder = new google.maps.Geocoder();
   $scope.destination;
   $scope.marker = null;
   $scope.currentMarkers = [];
-  
+
+  // declare one infoWindow to avoid multiple windows
+  var infowindow = new google.maps.InfoWindow();
+
   var questionBank = {
     hotel: {
       question: 'Please select a hotel below',
@@ -52,10 +61,9 @@ angular.module('app.new-trip', [])
 
   var userCoordinates;
 
-
+  // @input trip destination only. Nearby POIs use declare markers separately
   var createMarker = function(info) {
-    // if ($scope.marker) { $scope.marker.setMap(null); }
-    // $scope.destination = info.destination;
+    if ($scope.marker) { $scope.marker.setMap(null); }
 
     var marker = new google.maps.Marker({
       map: $scope.map,
@@ -66,13 +74,11 @@ angular.module('app.new-trip', [])
 
     $scope.marker = marker;
 
-
-    var infowindow = new google.maps.InfoWindow({
-      content: info.destination
-    });
     marker.addListener('click', function() {
+      infowindow.setContent(info.destination);
       infowindow.open(marker.get('map'), marker);
     })
+
     //uses jQuerey to set the value of the destination in the box
     document.getElementById("destination").value = info.destination;
     $('#destination').scope().$apply();
@@ -83,18 +89,6 @@ angular.module('app.new-trip', [])
     })
   };
 
-  var mapOptions = {
-    // start in USA
-    center: new google.maps.LatLng(37.09024, -95.712891),
-    zoom: 5
-  };
-
-  // create map
-  $scope.map = new google.maps.Map(document.getElementById("mapDiv"), mapOptions);
-
-  
-
-
   ////////////////// STOP STOP STOP STOP STOP ///////////////////////////
   ////////////////// STOP STOP STOP STOP STOP ///////////////////////////
   ////////////////// STOP STOP STOP STOP STOP ///////////////////////////
@@ -103,11 +97,9 @@ angular.module('app.new-trip', [])
 
   var input = (document.getElementById('destination'));
   //$scope.map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-
   var autocomplete = new google.maps.places.Autocomplete(input);
   autocomplete.bindTo('bounds', $scope.map);
 
-  var infowindow = new google.maps.InfoWindow();
         var marker = new google.maps.Marker({
           map: $scope.map,
           anchorPoint: new google.maps.Point(0, -29)
@@ -153,6 +145,7 @@ angular.module('app.new-trip', [])
   ////////////////// STOP STOP STOP STOP STOP ///////////////////////////
   ////////////////// STOP STOP STOP STOP STOP ///////////////////////////
   ////////////////// STOP STOP STOP STOP STOP ///////////////////////////
+
   var clearMarkers = function () {
     $scope.currentMarkers.forEach(function (marker) {
       marker.setMap(null);
@@ -177,30 +170,25 @@ angular.module('app.new-trip', [])
           place_id: point.place_id,
         });
 
-
         $scope.currentMarkers.push(marker);
 
-        marker.addListener('click', function() {
-          infowindow.open(marker.get('map'), marker);
-        });
-  
-        var infowindow = new google.maps.InfoWindow({
-          content: point.name + 
-          '<br><button id='+point.place_id+
-          '>Select ' + request.buttonTitle + '</button>'
-        });
+        google.maps.event.addListener(marker, 'click', function () {
+          infowindow.setContent(point.name + 
+            '<br><button id='+point.place_id+
+            '>Select ' + request.buttonTitle + '</button>'
+            );
+          infowindow.open($scope.map, marker);
+        })
 
         google.maps.event.addListener(infowindow, 'domready', function () {
           $('#' + point.place_id).click(function () {
             var buttonTitle = request.buttonTitle;
-            console.log('current title is ', buttonTitle);
             var nextQuestion = Object.keys(questionBank)[Object.keys(questionBank).indexOf(buttonTitle)+1];
             console.log('nextQuestion is ', nextQuestion);
             console.log('clicking on ' + point.place_id);
             questionBank[buttonTitle].answer = point;
             console.log(questionBank)
             displayQuestion(nextQuestion);
-
 
             if (nextQuestion !== 'hasBeenCalled') {
               $scope.showQuestion = false;
@@ -312,15 +300,6 @@ angular.module('app.new-trip', [])
         })
         $location.path('/my-trip/' + tripID);
       });
-  };
-
-  $scope.submitForm = function() {
-    Trips.newTrip($scope.info.destination, $scope.startDate, $scope.info.coordinates, function(id) {
-      console.log(id);
-      $scope.info._id = id;
-    });
-    //$scope.geocodeAddress();
-    $location.path('/trips/' + $scope.info._id);
   };
 
 });
