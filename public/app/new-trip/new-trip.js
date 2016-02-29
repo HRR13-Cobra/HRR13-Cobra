@@ -199,7 +199,7 @@ angular.module('app.new-trip', [])
     };
 
     if (!place.geometry) {
-      window.alert("Autocomplete's returned place contains no geometry");
+      Materialize.toast("Autocomplete's returned place contains no geometry" + $scope.thisTrip.destination, 5000, 'rounded');
       return;
     }
 
@@ -332,7 +332,7 @@ angular.module('app.new-trip', [])
 
     $.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + e.latLng.lat() + "," + e.latLng.lng() + "&key=AIzaSyCXPMP0KsMOdfwehnmOUwu-W3VOK92CkwI", function(data) {
       if (data.status === 'ZERO_RESULTS'){
-        alert('please click on land!');
+        Materialize.toast("Please click on land!" + $scope.thisTrip.destination, 5000, 'rounded');
       } else {
         info.coordinates = data.results[0].geometry.location;
         info.destination = data.results[1].formatted_address;

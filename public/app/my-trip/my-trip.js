@@ -1,6 +1,6 @@
 angular.module('app.my-trip', [])
 
-.controller('my-tripController', function($scope, $location, Trips, $route, Auth) {
+.controller('my-tripController', function($scope, $location, $window, Trips, $route, Auth) {
  
   $scope.thisTrip = {}; //stores information about the current trip, to display on page??
   $scope.path = $location.path().substring(9); // gets trip id from 
@@ -11,21 +11,22 @@ angular.module('app.my-trip', [])
   $scope.currentMarkerData = [];
   $scope.buttonTitle = 'hotel';
   $scope.nextQuestion;
+  $scope.addedPOIS;
   /* reqests information about the current trip from the Trips factory */
 
-  var questionBank = {
-    hotel: {
-      question: 'Please select a hotel below',
-      answer: null,
-    },
-    restaurant: {
-      question:'Please select a restaurant below',
-      answer: [],
-    },
-    hasBeenCalled: false,
-  };
+  // var questionBank = {
+  //   hotel: {
+  //     question: 'Please select a hotel below',
+  //     answer: null,
+  //   },
+  //   restaurant: {
+  //     question:'Please select a restaurant below',
+  //     answer: [],
+  //   },
+  //   hasBeenCalled: false,
+  // };
 
-  $scope.questions = questionBank['hotel'].question;
+  // $scope.questions = questionBank['hotel'].question;
 
   var tripData = {
     hotelID: null,
@@ -33,12 +34,12 @@ angular.module('app.my-trip', [])
     transportation: null, 
   }
 
-  var displayQuestion = function(type) {
-    $scope.questions = questionBank[type].question;
-    $('#questionsID').scope().$apply()
-  }
+  // var displayQuestion = function(type) {
+  //   $scope.questions = questionBank[type].question;
+  //   $('#questionsID').scope().$apply()
+  // }
 
-  var userCoordinates;
+  // var userCoordinates;
 
   var createContent = function(info) {
     var string = '';
@@ -108,13 +109,14 @@ angular.module('app.my-trip', [])
         $scope.thisTrip = data;
         if (data.coordinates) createMarker(data);
       });
-
   };
 
     /* run on my-trip page load */
   $scope.getTrip();
 
+
   var infowindow = new google.maps.InfoWindow();
+
   var assignInfoWindow = function(marker, contentStr) {
     google.maps.event.addListener(marker, 'mouseover', function() {
       infowindow.setContent(contentStr);
@@ -137,14 +139,32 @@ angular.module('app.my-trip', [])
   };
 
   $scope.setBounce = function(marker) {
-    console.log(marker);
     var syncMarker = $scope.currentMarkers[$scope.currentMarkerData.indexOf(marker)];
-    if (!marker.infomap) {
+    if (!marker.selected) {
       syncMarker.setAnimation(null);
     } else {
       syncMarker.setAnimation(google.maps.Animation.BOUNCE);
     }
   };
+
+  $scope.selectMarker = function(marker){
+    console.log($scope.thisTrip);
+    $scope.setBounce(marker);
+  };
+
+  $scope.savePage = function () {
+    $scope.currentMarkerData.forEach(function(poi, i){
+      if (poi.selected) {
+        Trips.addPOI($scope.thisTrip._id, poi.name,
+              '<img src=' + poi.image_url + '>' +
+              '<a href='+poi.url+'>link/a><br>' +
+              poi.location.address);
+        poi.selected = false;
+      }
+    });
+    $route.reload();
+  };
+
   var displayMarkersFromYelp = function (array) {
       var coordinates;
       // TODO: pass in pure arrays
@@ -197,7 +217,7 @@ angular.module('app.my-trip', [])
         $scope.currentMarkerData.push({
           // image_url: point.photos[0].getUrl(),
           name: point.name,
-          infomap: false,
+          selected: false,
           image_url: null,
           url: null,
           location: {
@@ -227,7 +247,7 @@ angular.module('app.my-trip', [])
               $scope.showQuestion = false;
 
               searchNearby({
-                location: userCoordinates,
+                location: $scope.thisTrip.coordinates,
                 radius: '5000',
                 types: [$scope.nextQuestion],
                 buttonTitle: $scope.nextQuestion
@@ -259,11 +279,14 @@ angular.module('app.my-trip', [])
     markerOptions: {icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'},
   });
 
-  $scope.getAttractions = function () {
+  $scope.getAttractions = function (userInput) {
     clearMarkers();
-
-    Trips.requestAttractions($scope.thisTrip.destination)
+    Trips.requestAttractions($scope.thisTrip.destination, userInput)
     .then(function (results) {
+      if (!results.data.businesses.length){
+        Materialize.toast('no results for '+ userInput +' found around ' + $scope.thisTrip.destination, 5000, 'rounded');
+      }
+      $scope.currentMarkerData = [];
       displayMarkersFromYelp(results.data.businesses);
     })
     .catch(function(err){
@@ -271,19 +294,18 @@ angular.module('app.my-trip', [])
     });
   };  
 
-  $scope.quickAdd = function () {
-    $scope.showQuestion = true;
-    if (!questionBank.hasBeenCalled) {
-      // console.log(userCoordinates)
-      searchNearby({
-        location: $scope.thisTrip.coordinates,
-        radius: '5000',
-        types: ['lodging'],
-        buttonTitle: 'hotel',
-      });
-      questionBank.hasBeenCalled = true;
-    }
-  };
+  // $scope.quickAdd = function () {
+  //   $scope.showQuestion = true;
+  //   if (!questionBank.hasBeenCalled) {
+  //     searchNearby({
+  //       location: $scope.thisTrip.coordinates,
+  //       radius: '5000',
+  //       types: ['lodging'],
+  //       buttonTitle: 'hotel',
+  //     });
+  //     questionBank.hasBeenCalled = true;
+  //   }
+  // };
 
 
 
@@ -335,39 +357,6 @@ angular.module('app.my-trip', [])
   });
   
   drawingManager.setMap($scope.map);
-
-  // $scope.geocodeAddress = function() {
-  //   $scope.geocoder.geocode({
-  //       'address': $scope.destination
-  //     },
-  //     function(results, status) {
-  //       var tempInfo;
-
-  //       // TODO: remove redundant code with add event listener
-  //       if (status === google.maps.GeocoderStatus.OK) {
-  //         $scope.map.setCenter(results[0].geometry.location);
-  //         tempInfo = {
-  //           destination: results[0].formatted_address,
-  //           coordinates: {
-  //             lat: results[0].geometry.location.lat(),
-  //             lng: results[0].geometry.location.lng()
-  //           },
-  //           POI: [],
-  //         }
-  //         console.log('tempinfo', tempInfo.coordinates);
-  //         $scope.destination = results[0].formatted_address;
-  //         Trips.newTrip(tempInfo.destination, $scope.startDate, tempInfo.coordinates, function(data) {
-  //           tempInfo._id = data;
-  //           createMarker(tempInfo);
-  //         })
-  //         $scope.map.setZoom(6);
-  //         $scope.map.panTo(tempInfo.position)
-  //       } else {
-  //         console.log('error')
-  //       }
-  //     }
-  //   );
-  // };
 
   $scope.selectPOI = function (POI) {
     console.log('selecting ' + POI);

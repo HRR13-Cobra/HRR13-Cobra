@@ -17,7 +17,8 @@ angular.module('app.auth', [])
           $window.localStorage.setItem('com.tp.user', data.id);
           $location.path('/trips');
         } else {
-          alert('username or password incorrect.'); // we'll want to handle this better
+          Materialize.toast(data, 5000, 'rounded');
+          //alert('username or password incorrect.'); // we'll want to handle this better
         }
       })
       .catch(function(error) {

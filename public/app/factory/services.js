@@ -80,11 +80,12 @@ angular.module('app.services', [])
         return results;
       });
   };
-  var requestAttractions = function(location) {
+
+  var requestAttractions = function (location, userInput) {
     return $http({
       method: 'GET',
-      url: 'api/trips/yelp/' + location.replace(' ', '_'),
-    }).then(function(results) {
+      url: 'api/trips/yelp/' + location.replace(' ', '_') +'?userInput=' + userInput,
+    }).then(function (results) {
       console.log(results);
       return results;
     })

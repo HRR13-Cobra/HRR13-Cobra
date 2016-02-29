@@ -8,8 +8,9 @@ var yelp = new Yelp({
 });
  
 exports.getPOI = function (req, res) {
+  console.log(req.query);
   console.log(req.params.city.replace('_',' '));
-  yelp.search({ term: 'tourist attraction', location: req.params.city.replace('_',' ') })
+  yelp.search({ term: req.query.userInput, location: req.params.city.replace('_',' ') })
   .then(function (data) {
     res.send(data);
     // console.log(data);
