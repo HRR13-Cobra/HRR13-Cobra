@@ -18,10 +18,10 @@ module.exports = {
     nodemailerMailgun.sendMail({
       from: '"Marco Polo" <your.trip.planner.co@sandbox838378b8b1a243919bd401f6bbe55d2a.mailgun.org>',
       to: username, // An array if you have multiple recipients.
-      subject: 'Hey you, awesome!',
+      subject: 'Welcome to Trip Planner!!',
       // 'h:Reply-To': 'reply2this@company.com',
       // //You can use "html:" to send HTML email content. It's magic!
-      html: '<b>Wow Big powerful letters</b>',
+      html: '<p>We hope to make your next vacation the best vacation.</p>',
       //You can use "text:" to send plain-text content. It's oldschool!
       text: 'Mailgun rocks, pow pow!'
     }, function (err, info) {
@@ -51,10 +51,10 @@ module.exports = {
     nodemailerMailgun.sendMail({
       from: '"Marco Polo" <your.trip.planner.co@sandbox838378b8b1a243919bd401f6bbe55d2a.mailgun.org>',
       to: username, // An array if you have multiple recipients.
-      subject: 'Hey you, awesome!',
+      subject: 'Hey you!',
       // 'h:Reply-To': 'reply2this@company.com',
       // //You can use "html:" to send HTML email content. It's magic!
-      html: '<b>Wow Big powerful letters</b>',
+      html: '<p>Looks like someone signed into your Trip Planner Account...<b>hope it was you...</b></p>',
       //You can use "text:" to send plain-text content. It's oldschool!
       text: 'Mailgun rocks, pow pow!'
     }, function (err, info) {
