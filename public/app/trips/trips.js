@@ -4,7 +4,7 @@ angular.module('app.trips', [])
   $scope.trips = {};
 
   $scope.map;
-  $scope.geocoder = new google.maps.Geocoder();
+  //$scope.geocoder = new google.maps.Geocoder();
   $scope.destination;
   var coordinates = {};
 
@@ -57,6 +57,7 @@ angular.module('app.trips', [])
   };
 
   $scope.showTripsOnMap = function(user) {
+    console.log('hi')
     Trips.allTrips(user)
       .then(function(data) {
         $scope.trips = data;
