@@ -37,11 +37,6 @@ module.exports = function(app, express) {
   app.use('/api/users', userRouter);
   app.use('/api/trips', tripRouter);
 
-  // for testing purpose only
-  app.post('/api/myuser', function(req, res) {
-    console.log('request.body', req.body);
-    res.send('test');
-  });
 
   require('../users/userRoutes')(userRouter);
   require('../trips/tripRoutes')(tripRouter);

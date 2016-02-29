@@ -76,6 +76,16 @@ angular.module('app.services', [])
       return results;
     })
   }
+
+  var searchOverlay = function(location) {
+    console.log(location.toString());
+    return $http({
+      method: 'POST',
+      url: 'api/trips/yelp/overlay',
+      data: {location:location},
+    });
+
+  }
   var addPOI = function(tripID, title, details) {
     var tripData = {
       _id: tripID,
@@ -84,7 +94,7 @@ angular.module('app.services', [])
     };
     return $http({
       method: 'PUT',
-      url: '/api/trips/modify',
+      url: 'api/trips/modify',
       data: tripData
     });
   };
@@ -135,6 +145,7 @@ angular.module('app.services', [])
     });
   };
   return {
+    searchOverlay: searchOverlay,
     requestAttractions: requestAttractions,
     allTrips: allTrips,
     accessTrip: accessTrip,

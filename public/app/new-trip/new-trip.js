@@ -26,6 +26,7 @@ angular.module('app.new-trip', [])
   $scope.destination;
   $scope.marker = null;
   $scope.currentMarkers = [];
+  $scope.currentMarkerData = [];
 
   // declare one infoWindow to avoid multiple windows
   var infowindow = new google.maps.InfoWindow();
@@ -95,9 +96,31 @@ angular.module('app.new-trip', [])
     })
   };
 
-  ////////////////// STOP STOP STOP STOP STOP ///////////////////////////
-  ////////////////// STOP STOP STOP STOP STOP ///////////////////////////
-  ////////////////// STOP STOP STOP STOP STOP ///////////////////////////
+  var displayMarkersFromYelp = function (array) {
+      // TODO: pass in pure arrays
+      // array.data.businesses.forEach(function(point) {
+      array.forEach(function(point) {
+      var coordinates = {
+        lat: point.location.coordinate.latitude,
+        lng: point.location.coordinate.longitude,
+      };
+      var marker = new google.maps.Marker({
+        map: $scope.map,
+        position: coordinates,
+        icon: {
+          url: 'https://cdn2.iconfinder.com/data/icons/smiled-map-markers/512/retired_marker_pointer_position_emotion_emoticon_smile-512.png',
+          path: google.maps.SymbolPath.CIRCLE,
+          scale: 10
+          },
+        animation: google.maps.Animation.DROP,
+      });
+
+      assignInfoWindow(marker, point.name);
+      $scope.currentMarkerData.push(point);
+      $scope.currentMarkers.push(marker);
+      })
+      // console.log('current markers: ', $scope.currentMarkers)
+  }
 
   var input = (document.getElementById('destination'));
   //$scope.map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
@@ -108,7 +131,7 @@ angular.module('app.new-trip', [])
   var marker = new google.maps.Marker({
     map: $scope.map,
     anchorPoint: new google.maps.Point(0, -29)
-  });
+  });1
 
   autocomplete.addListener('place_changed', function() {
 
@@ -146,10 +169,6 @@ angular.module('app.new-trip', [])
     $scope.info = info;
     $scope.destinaiton = info.destination;    
   });
-
-  ////////////////// STOP STOP STOP STOP STOP ///////////////////////////
-  ////////////////// STOP STOP STOP STOP STOP ///////////////////////////
-  ////////////////// STOP STOP STOP STOP STOP ///////////////////////////
 
   var clearMarkers = function () {
     $scope.currentMarkers.forEach(function (marker) {
@@ -247,37 +266,13 @@ angular.module('app.new-trip', [])
     $scope.destination = document.getElementById("destination").value;
     Trips.requestAttractions($scope.destination)
     .then(function (results) {
-
-      results.data.businesses.forEach(function(point) {
-        console.log(point);
-        var shape = {
-          coords: [1, 1, 1, 20, 18, 20, 18, 1],
-          type: 'poly'
-        };
-        var coordinates = {
-          lat: point.location.coordinate.latitude,
-          lng: point.location.coordinate.longitude,
-        };
-        var marker = new google.maps.Marker({
-          map: $scope.map,
-          position: coordinates,
-          icon: {
-            url: 'https://cdn2.iconfinder.com/data/icons/smiled-map-markers/512/retired_marker_pointer_position_emotion_emoticon_smile-512.png',
-            size: new google.maps.Size(71, 71),
-            origin: new google.maps.Point(0, 0),
-            scaledSize: new google.maps.Size(40, 40)
-            },
-          animation: google.maps.Animation.DROP,
-        });
-
-        assignInfoWindow(marker, point.name);
-        $scope.currentMarkers.push(marker);
-      })
+      displayMarkersFromYelp(results);
     })
     .catch(function(err){
       console.error(err);
     });
   }  
+
   $scope.quickAdd = function () {
     $scope.showQuestion = true;
     if (!questionBank.hasBeenCalled) {
@@ -290,6 +285,79 @@ angular.module('app.new-trip', [])
       questionBank.hasBeenCalled = true;
     }
   }
+
+  // Enables drawing on map
+  var drawingManager = new google.maps.drawing.DrawingManager({
+    drawingMode: google.maps.drawing.OverlayType.MARKER,
+    drawingControl: true,
+    drawingControlOptions: {
+      position: google.maps.ControlPosition.TOP_CENTER,
+      drawingModes: [
+        // google.maps.drawing.OverlayType.MARKER,
+        // google.maps.drawing.OverlayType.CIRCLE,
+        // google.maps.drawing.OverlayType.POLYGON,
+        google.maps.drawing.OverlayType.POLYLINE,
+        google.maps.drawing.OverlayType.RECTANGLE,
+      ]
+    },
+    markerOptions: {icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'},
+    circleOptions: {
+      fillColor: '#ffff00',
+      fillOpacity: 0.2,
+      strokeWeight: 5,
+      clickable: false,
+      editable: true,
+      zIndex: 1
+    }
+  });
+
+  google.maps.event.addListener(drawingManager, 'polylinecomplete', function(event) {
+    console.log(event);
+    // get 10 requests per line
+    console.log(event.getPath().getArray().toString());
+    var fromPoint = [event.getPath().getArray()[0].lat(), event.getPath().getArray()[0].lng()];
+    var toPoint = [event.getPath().getArray()[1].lat(), event.getPath().getArray()[1].lng()]
+    var latIncrement = (toPoint[0] - fromPoint[0]) / 10;
+    var lngIncrement = (toPoint[1] - fromPoint[1]) / 10;
+    // generate ten points in this line
+    var tenPoints = [];
+    var count = 1;
+    var yelpResults = [];
+    while (count < 10) {
+      tenPoints.push([fromPoint[0] + latIncrement * count, fromPoint[1] + lngIncrement * count])
+      count++;
+    }
+    Trips.searchOverlay(tenPoints)
+    .then(function(results) {
+      console.log(results);
+      results.data.forEach(function(obj) {
+        yelpResults.push(obj.businesses[0]);
+      });
+      displayMarkersFromYelp(yelpResults);
+    })
+    .catch(function(err) {
+      console.error(err);
+    });
+});  
+  google.maps.event.addListener(drawingManager, 'rectanglecomplete', function(event) {
+    var rectCoordinates = event.getBounds()
+      .toString()
+      .replace(/[()]/g, '')
+      .split(',')
+      .map(function(val){
+        return Number(val)
+      });
+    Trips.searchOverlay(rectCoordinates)
+    .then(function(results) {
+      console.log(results);
+      displayMarkersFromYelp(results.data.businesses);
+    })
+    .catch(function(err){
+      console.error(err);
+    });
+});
+  
+  drawingManager.setMap($scope.map);
 
   $scope.geocodeAddress = function() {
     $scope.geocoder.geocode({
@@ -334,4 +402,7 @@ angular.module('app.new-trip', [])
       });
   };
 
+  $scope.selectPOI = function (POI) {
+    console.log('selecting ' + POI);
+  }
 });
