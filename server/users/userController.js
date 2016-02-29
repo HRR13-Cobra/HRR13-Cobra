@@ -16,10 +16,8 @@ module.exports = {
       // password: Users.generateHash(req.body.password),
     });
     newUser.password = newUser.generateHash(req.body.password);
-
     // sends welcome email
     // Email.signupEmail(newUser.username)
-
     newUser.save(function(err, user) {
       if (err) {
         console.error(err);

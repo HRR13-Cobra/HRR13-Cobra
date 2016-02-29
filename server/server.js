@@ -10,8 +10,8 @@ var Trips = require('./trips/tripModel.js');
 var moment = require('moment');
 
 //create connection to database
-// mongoose.connect('mongodb://cobras:cobras123@ds047065.mongolab.com:47065/tripplanner');
-mongoose.connect('mongodb://127.0.0.1:27017/tripplanner');
+mongoose.connect('mongodb://cobras:cobra123@ds047065.mlab.com:47065/tripplanner');
+// mongoose.connect('mongodb://127.0.0.1:27017/tripplanner');
 
 var app = express();
 

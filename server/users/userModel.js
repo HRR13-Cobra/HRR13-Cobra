@@ -26,7 +26,6 @@ UserSchema.methods = {
 
   generateHash: function(password) {
     // @method .genSaltSync(9) to encrypt 9 times
-    console.log(password);
     return bcrypt.hashSync(password, bcrypt.genSaltSync(9));
   },
 
