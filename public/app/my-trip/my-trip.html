@@ -20,104 +20,65 @@
   </div>
 </nav>
 <div class="container">
-  <div>
+  <div class="row">
     <h2>My Trip to
       {{ thisTrip.destination }}</h2>
     <!-- Pre Trip Checklist -->
     <!-- <div id='mapDiv'></div> -->
-            <button
-          class="waves-effect waves-light btn amber darken-3"
-          class="md-raised"
-          ng-click="savePage()"
-          >Save changes
-        </button>
-    <div class="col s12" id="nearby" name='nearbybuttons'>
+    <button class="waves-effect waves-light btn amber darken-3" class="md-raised" ng-click="savePage()">Save changes
+    </button>
+  </div>
+  <div class="row">
+    <div id="nearby" name='nearbybuttons'>
+      <input type='text' class="command col s9" id="userSearchInput" name="userSearchInput" ng-model="userSearchInput" placeholder="Find a room, resturants, and other places near your destination!">
+      <div class="col s1"></div>
       <div class="col s3">
-      <div class="col s6"><input
-          type='text'
-          class="controls"
-          id="userSearchInput"
-          name="userSearchInput"
-          ng-model="userSearchInput">
-      </div>
-        <button
-          class="waves-effect waves-light btn amber darken-3"
-          class="md-raised"
-          ng-click="getAttractions(userSearchInput)"
-          >List Nearby
+        <button class="waves-effect waves-light btn amber darken-3" class="md-raised" ng-click="getAttractions(userSearchInput)">Search Nearby
         </button>
-        <p></p>
       </div>
-      <div class="col s3">
-<!--         <button
-          class="waves-effect waves-light btn amber darken-3"
-          class="md-raised"
-          ng-click="quickAdd()"
-          >Quick Add
->>>>>>> updates to my-trip page, filter search by user input, added save button to save checked attractions to trip schema
-        </button>
-        <p></p>
-      </div>
-      <div class="col s3">
-<<<<<<< 7fe08b10d3e42c12d072f7dc9ac0129bd755375e
-        <button class="waves-effect waves-light btn amber darken-3" class="md-raised" ng-click="addDay()">Add a day
-        </button>
-        <p></p>
-      </div>
-    </form>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-    <h5 class="col s10" id="questionsID" ng-model="questions" ng-show="showQuestion">{{questions}}</h5>
-=======
-        <button
-          class="waves-effect waves-light btn amber darken-3"
-          class="md-raised"
-          ng-click="addDay()"
-          >Add a day
-        </button> -->
-
-        <p> </p>
-      </div>
+      <p></p>
     </div>
+    <p></p>
+  </div>
   <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-    <h5 class="col s10"id="questionsID" ng-model="questions" ng-show="showQuestion">{{questions}}</h5>
-    <div class="right-align">
-      <button ng-show="showQuestion" ng-click="next()" class="waves-light waves-effect btn amber darken-5 md-raised">Next Question</button>
-      <button ng-show="showQuestion" class="waves-light waves-effect btn amber darken-5 md-raised">N/A</button>
-    </div>
-    <div class="row">
-      <!-- <div class="container" style="display: inline-block"> -->
-      <div id="mapDiv" style="width:60%" class="col s5"></div>
-      <div class="col s4" id="poiList">
-        <div class="scroll">
-          <div ng-model="showAdd" ng-mouseenter="showAdd = true" ng-mouseleave="showAdd = false"ng-repeat="marker in currentMarkerData" >
-          <img ng-mouseenter="syncInfoWindow(marker)" ng-mouseleave="leaveInfoWindow(marker)"src={{marker.image_url}}>
-          <span ng-mouseenter="style={color:'green'}"
-                ng-mouseleave="style={color:'black'}"
-                ng-style="style"
-                ng-click="openTab(marker.url)">{{marker.name}}</span><br>
-                <!-- TODO: save checked to trip -->
-          <input type="checkbox" ng-model="marker.selected"id="{{marker.name}}" ng-click="selectMarker(marker)">
+  <h5 class="col s10" id="questionsID" ng-model="questions" ng-show="showQuestion">{{questions}}</h5>
+  <div class="right-align">
+    <button ng-show="showQuestion" ng-click="next()" class="waves-light waves-effect btn amber darken-5 md-raised">Next Question</button>
+    <button ng-show="showQuestion" class="waves-light waves-effect btn amber darken-5 md-raised">N/A</button>
+  </div>
+  <div class="row">
+    <!-- <div class="container" style="display: inline-block"> -->
+    <div id="mapDiv" style="width:60%" class="col s5"></div>
+    <div class="col s4" id="poiList">
+      <div class="scroll">
+        <div ng-model="showAdd" ng-mouseenter="showAdd = true" ng-mouseleave="showAdd = false" ng-repeat="marker in currentMarkerData">
+          <img ng-mouseenter="syncInfoWindow(marker)" ng-mouseleave="leaveInfoWindow(marker)" src={{marker.image_url}}>
+          <span ng-mouseenter="style={color:'green'}" ng-mouseleave="style={color:'black'}" ng-style="style" ng-click="openTab(marker.url)">{{marker.name}}</span><br>
+          <!-- TODO: save checked to trip -->
+          <input type="checkbox" ng-model="marker.selected" id="{{marker.name}}" ng-click="selectMarker(marker)">
           <label for="{{marker.name}}">Add to trip</label>
-          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-
-<h4>Pre-Trip ToDo List</h4>
-<form name="checklist">
-  <div>
-    <input type="checkbox" id="isflying" ng-model="flying" ng-change="triggerCheck('flying', flying)" ng-checked="thisTrip.flying == true">
-    <label for="isflying">Are you flying?</label>
-    <input type="checkbox" id="isleavingCountry" ng-model="leavingCountry" ng-change="triggerCheck('leavingCountry', leavingCountry)" ng-checked="thisTrip.leavingCountry == true">
-    <label for="isleavingCountry">Are you leaving the country?</label>
-    <input type="checkbox" id="istravelingAlone" ng-model="travelingAlone" ng-change="triggerCheck('travelingAlone', travelingAlone)" ng-checked="thisTrip.travelingAlone == true">
-    <label for="istravelingAlone">Are you traveling with someone?</label>
-    <input type="checkbox" id="isaccomodations" ng-model="accomodations" ng-change="triggerCheck('accomodations', accomodations)" ng-checked="thisTrip.accomodations == true">
-    <label for="isaccomodations">Have you reserved accomodations?</label>
+<div class="row">
+  <div class="col s8 offset-s2">
+    <h4>Pre-Trip ToDo List</h4>
+    <form name="checklist">
+      <div>
+        <input type="checkbox" id="isflying" ng-model="flying" ng-change="triggerCheck('flying', flying)" ng-checked="thisTrip.flying == true">
+        <label for="isflying">Are you flying?</label>
+        <input type="checkbox" id="isleavingCountry" ng-model="leavingCountry" ng-change="triggerCheck('leavingCountry', leavingCountry)" ng-checked="thisTrip.leavingCountry == true">
+        <label for="isleavingCountry">Are you leaving the country?</label>
+        <input type="checkbox" id="istravelingAlone" ng-model="travelingAlone" ng-change="triggerCheck('travelingAlone', travelingAlone)" ng-checked="thisTrip.travelingAlone == true">
+        <label for="istravelingAlone">Are you traveling with someone?</label>
+        <input type="checkbox" id="isaccomodations" ng-model="accomodations" ng-change="triggerCheck('accomodations', accomodations)" ng-checked="thisTrip.accomodations == true">
+        <label for="isaccomodations">Have you reserved accomodations?</label>
+      </div>
+    </form>
   </div>
-</form>
+</div>
 <!--Places to Visit-->
 <div class="row">
   <div class="col s8 offset-s2">

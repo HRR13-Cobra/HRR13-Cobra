@@ -4,7 +4,7 @@ angular.module('app.auth', [])
   also contains logic for profile page - migrate maybe?
 */
 .controller('AuthController', function($scope, $window, $location, Auth) {
-  $scope.user = {}; // used to store user's email address for profile page
+  $scope.loggedin = {}; // used to store user's email address for profile page
 
   /* user sign-in for exisiting users
      routes to trips page upon verification
