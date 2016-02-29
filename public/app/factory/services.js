@@ -1,14 +1,15 @@
 angular.module('app.services', [])
 
+
+/* Trips factory containing all trip related requests to server */
 .factory('Trips', function($http, $window) {
 
-  //persistent storage of all trips for given user
-  var trips = {};
-  //pulls the current user for the JWT
-  var user = $window.localStorage.getItem('com.tp.user');
-  //loads the current trip as separate storage object
-  var tripID = {};
+  
+  var trips = {}; // persistent storage of all trips for given user
+  var user = $window.localStorage.getItem('com.tp.user'); // pulls the current user for the JWT
+  var tripID = {}; // loads the current trip as separate storage object
 
+  /* fetches all trips for a given user - called on trips page load */
   var allTrips = function(user) {
     return $http({
         method: 'GET',
@@ -23,12 +24,15 @@ angular.module('app.services', [])
       });
   };
 
-  //populates trips object on instantiation
-  allTrips(user);
+  
+  allTrips(user); // populates trips object on instantiation
 
+  /* fetches single trip matching tripID for a given user - called on my-trip/:id
+     page load 
+  */
   var accessTrip = function(tripID) {
-    //if accessing page through bookmark or reload, sets the current tripID
-    tripID = tripID;
+    console.log('you called me');
+    tripID = tripID; // if accessing page through bookmark or reload, sets tripID (used to define path)
     return $http({
         method: 'GET',
         url: '/api/trips/' + tripID
@@ -38,6 +42,12 @@ angular.module('app.services', [])
       });
   };
 
+  /* creates new trip
+     only called once the submit button is pressed on create trip page
+     destination based on either dropped pin or autocompleted address in
+     text input bar
+     returns newly created trip 
+  */
   var newTrip = function(destination, startDate, coordinates) {
     return $http({
         method: 'POST',
@@ -55,6 +65,9 @@ angular.module('app.services', [])
       });
   };
 
+  /* deletes a trip - called from trips page using either infowindow delete (on map)
+     or trash icon (in list), also called from my-trip page using delete button (pending) 
+  */
   var removeTrip = function(target) {
     return $http({
         method: 'POST',
@@ -84,8 +97,13 @@ angular.module('app.services', [])
       url: 'api/trips/yelp/overlay',
       data: {location:location},
     });
+  };
 
-  }
+  /* add point of interest to trip.  currently called from my-trip page by 
+     manual input of POI (not filtered) and on create-trip page with results 
+     pulled from google places library (to be migrated to my-trip page) 
+  */ 
+
   var addPOI = function(tripID, title, details) {
     var tripData = {
       _id: tripID,
@@ -111,7 +129,13 @@ angular.module('app.services', [])
       data: tripData
     });
   }
-  //someone please refactor me!!!!
+
+  /* someone please refactor me!!!!
+     trip specific information shown on my-trip page
+     used to add trip-specific information to trip instance in mongo
+     data is used to send email notifications in relevant trip-related 
+     situations (reminders)
+  */
   var addTrigger = function(tripID, string, value) {
     var tripData = {};
     if (string === 'flying') {
@@ -159,13 +183,17 @@ angular.module('app.services', [])
 
 })
 
+
+
+/* Auth factory containing all user/authentication related requests to server 
+   responsible for authenticating user on signin, and returning tokens 
+   for authentication during site use while navigating site
+
+   token is stored in localStorage as 'com.tp'
+*/
 .factory('Auth', function($http, $location, $window) {
-  // it is responsible for authenticating our user
-  // by exchanging the user's username and password
-  // for a JWT from the server
-  // that JWT is then stored in localStorage as 'com.tp'
-  // after you signin/signup open devtools, click resources,
-  // then localStorage and you'll see your token from the server
+
+  /* user sign in - returns token */
   var signin = function(user) {
     return $http({
         method: 'POST',
@@ -177,6 +205,7 @@ angular.module('app.services', [])
       });
   };
 
+  /* user sign up - returns token */
   var signup = function(user) {
     return $http({
         method: 'POST',
@@ -188,17 +217,19 @@ angular.module('app.services', [])
       });
   };
 
+  /* checks for token on each page */
   var isAuth = function() {
-    // check for user permissions on each page
     return !!$window.localStorage.getItem('com.tp');
   };
 
+  /* removes token */ 
   var signout = function() {
     $window.localStorage.removeItem('com.tp');
     $window.localStorage.removeItem('com.tp.user');
     $location.path('/logout');
   };
 
+  /* deletes user from database - called on user profile page */
   var removeUser = function() {
     console.log('services removing user')
     return $http({

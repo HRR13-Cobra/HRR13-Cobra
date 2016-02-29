@@ -1,9 +1,11 @@
-
 angular.module('app.new-trip', [])
 
-.controller('new-tripController', function($scope, $location, $window, Trips, Auth) {
-  $(document).ready(function(){
-    $('#locationForm').keypress(function(event) {
+/**/
+.controller('new-tripController', function ($scope, $location, $window, Trips, Auth) {
+  
+  /* disables submit on pressing enter button (must click submit button) */
+  $(document).ready(function () {
+    $('#locationForm').keypress(function (event) {
       if (event.keyCode === 13 ) {
         console.log('preventing');
         event.preventDefault();
@@ -39,11 +41,12 @@ angular.module('app.new-trip', [])
       types: [$scope.nextQuestion],
       buttonTitle: $scope.nextQuestion
     });
-  }
+  };
+
   $scope.openTab = function(url) {
     console.log('url', url)
     $window.open(url, '_blank');
-  }
+  };
 
   // declare one infoWindow to avoid multiple windows
   var infowindow = new google.maps.InfoWindow();
@@ -55,17 +58,18 @@ angular.module('app.new-trip', [])
     google.maps.event.addListener(marker, 'mouseout', function() {
       infowindow.close();
     });
-  }
+  };
+
   $scope.syncInfoWindow = function(marker) {
     var syncMarker = $scope.currentMarkers[$scope.currentMarkerData.indexOf(marker)];
     infowindow.setContent(marker.name);
     infowindow.open($scope.map, syncMarker);
-  }
+  };
 
   $scope.leaveInfoWindow = function(marker) {
     var syncMarker = $scope.currentMarkers[$scope.currentMarkerData.indexOf(marker)];
     infowindow.close()
-  }
+  };
 
   $scope.setBounce = function(marker) {
     console.log(marker);
@@ -75,8 +79,7 @@ angular.module('app.new-trip', [])
     } else {
       syncMarker.setAnimation(google.maps.Animation.BOUNCE);
     }
-
-  }
+  };
 
   var questionBank = {
     hotel: {
@@ -109,6 +112,22 @@ angular.module('app.new-trip', [])
   var createMarker = function(info) {
     if ($scope.marker) { $scope.marker.setMap(null); }
     // console.log(info.coordinates, 'coordinates');
+
+  $scope.map;
+  $scope.geocoder = new google.maps.Geocoder(); // where is this used?
+  $scope.destination;
+  $scope.marker = null;
+
+  var coordinates = {}; // where is this used?
+
+  /* creates marker on map 
+     takes trip info as input, location data from mouse click on map
+     or from autocompleted address in text input bar
+  */
+  var createMarker = function (info) {
+    if ($scope.marker) { $scope.marker.setMap(null); } // if a marker has already been set, removes from map before creating new
+    $scope.destination = info.destination;
+
     var marker = new google.maps.Marker({
       map: $scope.map,
       position: info.coordinates,
@@ -116,21 +135,23 @@ angular.module('app.new-trip', [])
       animation: google.maps.Animation.DROP,
     });
 
-    $scope.marker = marker;
+    $scope.marker = marker; // sets marker on scope, so we have access to info and can remove
 
+    /* adds info window on marker which displays location informition
+       opens when marker is clicked 
+    */
+    var infowindow = new google.maps.InfoWindow({
+      content: info.destination
+    });
     marker.addListener('click', function() {
       infowindow.setContent(info.destination);
       infowindow.open(marker.get('map'), marker);
-    })
+    });
 
     //uses jQuerey to set the value of the destination in the box
     document.getElementById("destination").value = info.destination;
     $('#destination').scope().$apply();
 
-    marker.addListener('dragend', function(){
-      document.getElementById("destination").value = $scope.destination;
-      $('#destination').scope().$apply();
-    })
   };
 
   var displayMarkersFromYelp = function (array) {
@@ -138,25 +159,25 @@ angular.module('app.new-trip', [])
       // TODO: pass in pure arrays
       // array.data.businesses.forEach(function(point) {
       array.forEach(function(point) {
-      coordinates = {
-        lat: point.location.coordinate.latitude,
-        lng: point.location.coordinate.longitude,
-      };
-      var marker = new google.maps.Marker({
-        map: $scope.map,
-        position: coordinates,
-        animation: google.maps.Animation.DROP,
+        coordinates = {
+          lat: point.location.coordinate.latitude,
+          lng: point.location.coordinate.longitude,
+        };
+        var marker = new google.maps.Marker({
+          map: $scope.map,
+          position: coordinates,
+          animation: google.maps.Animation.DROP,
+        });
+
+        $scope.map.setZoom(8);
+        $scope.map.panTo(coordinates);
+
+        assignInfoWindow(marker, point.name);
+        $scope.currentMarkerData.push(point);
+        $scope.currentMarkers.push(marker);
       });
-
-      $scope.map.setZoom(8);
-      $scope.map.panTo(coordinates);
-
-      assignInfoWindow(marker, point.name);
-      $scope.currentMarkerData.push(point);
-      $scope.currentMarkers.push(marker);
-      })
       // console.log('current markers: ', $scope.currentMarkers)
-  }
+  };
 
   var input = (document.getElementById('destination'));
   //$scope.map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
@@ -180,7 +201,7 @@ angular.module('app.new-trip', [])
     userCoordinates = {
         lat: place.geometry.location.lat(),
         lng: place.geometry.location.lng()
-    }
+    };
 
     if (!place.geometry) {
       window.alert("Autocomplete's returned place contains no geometry");
@@ -216,7 +237,7 @@ angular.module('app.new-trip', [])
     $scope.currentMarkers.forEach(function (marker) {
       marker.setMap(null);
     });
-  }
+  };
 
   var searchNearby = function (request) {
     clearMarkers();
@@ -285,7 +306,7 @@ angular.module('app.new-trip', [])
         $scope.map.panTo(request.location)
       });
     });
-  }
+  };
 
     // Enables drawing on map
   var drawingManager = new google.maps.drawing.DrawingManager({
@@ -341,7 +362,7 @@ angular.module('app.new-trip', [])
     .catch(function(err){
       console.error(err);
     });
-  }  
+  };  
 
   $scope.quickAdd = function () {
     $scope.showQuestion = true;
@@ -352,10 +373,10 @@ angular.module('app.new-trip', [])
         radius: '5000',
         types: ['lodging'],
         buttonTitle: 'hotel',
-      })
+      });
       questionBank.hasBeenCalled = true;
     }
-  }
+  };
 
 
 
@@ -386,7 +407,8 @@ angular.module('app.new-trip', [])
     .catch(function(err) {
       console.error(err);
     });
-});  
+  });
+
   google.maps.event.addListener(drawingManager, 'rectanglecomplete', function(event) {
     var rectCoordinates = event.getBounds()
       .toString()
@@ -403,7 +425,7 @@ angular.module('app.new-trip', [])
     .catch(function(err){
       console.error(err);
     });
-});
+  });
   
   drawingManager.setMap($scope.map);
 
@@ -436,8 +458,9 @@ angular.module('app.new-trip', [])
         } else {
           console.log('error')
         }
-      });
-    };
+      }
+    );
+  };
 
   $scope.createTrip = function() {
     var selectedPOI = [];
@@ -458,5 +481,19 @@ angular.module('app.new-trip', [])
 
   $scope.selectPOI = function (POI) {
     console.log('selecting ' + POI);
-  }
-});
+  };
+
+  $scope.submitForm = function () {
+    Trips.newTrip($scope.info.destination, $scope.startDate, $scope.info.coordinates, function(id) {
+      console.log(id);
+      $scope.info._id = id;
+    });
+    //$scope.geocodeAddress();
+    $location.path('/trips/' + $scope.info._id);
+  };
+
+  /* called from logout button in menu bar for auth pages */
+  $scope.signout = function () {
+    Auth.signout();
+  };
+}
