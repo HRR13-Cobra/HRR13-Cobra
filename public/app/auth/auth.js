@@ -1,15 +1,14 @@
 angular.module('app.auth', [])
 
-/* controller in charge of login, logout and sign-up pages, 
-  also contains logic for profile page - migrate maybe? 
+/* controller in charge of login, logout and sign-up pages,
+  also contains logic for profile page - migrate maybe?
 */
 .controller('AuthController', function($scope, $window, $location, Auth) {
-  $scope.user = {}; // used to store user input for sign-in/sign-up
-  // REMOVE? $scope.profile = $window.localStorage.getItem('com.tp.user')
+  $scope.user = {}; // used to store user's email address for profile page
 
- /* user sign-in for exisiting users
-    routes to trips page upon verification 
- */
+  /* user sign-in for exisiting users
+     routes to trips page upon verification
+  */
   $scope.signin = function() {
     Auth.signin($scope.user)
       .then(function(data) {
@@ -26,8 +25,8 @@ angular.module('app.auth', [])
       });
   };
 
-  /* user sign-up for first time users 
-     sets jwt and re-routes to new trip page to create first trip 
+  /* user sign-up for first time users
+     sets jwt and re-routes to new trip page to create first trip
   */
   $scope.signup = function() {
     Auth.signup($scope.user)
@@ -41,23 +40,38 @@ angular.module('app.auth', [])
       });
   };
 
-  /* used to retrieve user from database for user profile page
-     migrate to profile page 
-  */
-  $scope.getUser = function(){
-    Auth.getUser($scope.user)
-      .then(function(data){
-        $scope.userData = data;
+  /* used to retrieve user from database for user profile page */
+  $scope.getUser = function() {
+    Auth.getUser()
+      .then(function(data) {
+        console.log(data);
+        $scope.user = data;
       });
   };
 
   /* called from logout button in menu bar for auth pages */
-  $scope.signout = function () {
+  $scope.signout = function() {
     Auth.signout();
+  };
+
+  $scope.changePassword = function(oldPass, newPass) {
+    Auth.changePassword(oldPass, newPass)
+      .then(function(data) {
+        if (data == 'Nope') {
+          alert('Incorrect password. Try again.'); // we'll want to handle this better
+        } else {
+          alert('Password Changed'); // we'll want to handle this better
+        }
+      })
+      .catch(function(error) {
+        console.error('catch error', error);
+      });
   };
 
   /* delete account available on profile page - migrate to profile */
   $scope.removeUser = function() {
     Auth.removeUser()
   }
+
+  $scope.getUser();
 });

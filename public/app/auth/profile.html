@@ -1,0 +1,59 @@
+<!-- Navbar -->
+<nav class="orange lighten-2">
+  <div class="nav-wrapper">
+    <div class="brand-logo"><img src="app/styles/79500-200.png" height=48px width=48px>Trip Planner</div>
+    <ul id="nav-mobile" class="right hide-on-med-and-down">
+      <li>
+        <a href="/#/new-trip">Create Trip</a>
+      </li>
+      <li>
+        <a href="#/trips">
+          My Trips</a>
+      </li>
+      <li ng-click="signout()">
+        <a>Signout</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+<!-- Page Content -->
+<div class="container">
+  <h3>My Profile</h3>
+  <p>Hello
+    {{user}}. Nice to see you again. Not
+    {{user}}?
+    <a ng-click="signout()">Signout</a>
+  </p>
+  <div class="row">
+    <div class="col s12 m6">
+      <div class="card orange lighten-5">
+        <div class="card-content black-text">
+          <span class="card-title">Change Password</span>
+          <p>Please enter your current password and your new password.</p>
+          <div class="input-field">
+            <input class="placeholderColor" placeholder="Old Password" name="oldPassword" type="oldPassword" ng-model="user.oldPassword" ng-minlength="8" required>
+          </div>
+          <div class="input-field">
+            <input class="placeholderColor" placeholder="New Password" name="newPassword" type="newPassword" ng-model="user.newPassword" ng-minlength="8" required>
+          </div>
+          <div class="input-field">
+            <button class="waves-effect waves-light btn amber darken-3" type="submit" ng-click="changePassword(user.oldPassword, user.newPassword)">Update</button>
+          </div>
+        </div>
+      </div>
+      <div class="card orange lighten-5">
+        <div class="card-content black-text">
+          <span class="card-title">
+            <i class="material-icons">warning</i>
+            Delete Account
+            <i class="material-icons">warning</i>
+          </span>
+          <p>Please click here to remove your account and all saved trips. This is permanent and will take effect immediately. Don't press this button without care.</p>
+          <div class="input-field">
+            <button class="waves-effect waves-light btn grey darken-2" type="submit" ng-click="removeUser()">Delete Account Forever</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -89,7 +89,6 @@ module.exports = {
         // compares current password with hashed password from found user
         if (userLogin.comparePasswords(userLogin.password, user.password)) {
           var token = authController.createToken(user);
-          console.log(token);
           Trips.find({
               userId: user._id
             })
@@ -108,10 +107,9 @@ module.exports = {
   },
 
   removeUser: function(req, res) {
-    console.log('user to be removed',req.decoded.username);
     Users.remove({
-        'username': req.decoded.username
-      })
+      'username': req.decoded.username
+    })
     Trips.remove({
         'userId': req.decoded.username
       })
@@ -120,10 +118,37 @@ module.exports = {
       })
   },
 
+  changePassword: function(req, res) {
+    var userLogin = Users({
+      username: req.decoded.username,
+      password: req.body.prev
+    });
+    Users.findOne({
+      'username': userLogin.username
+    }, function(err, user) {
+      if (!user) {
+        // no matching username
+        res.send('Not Found');
+      } else {
+        // compares current password with hashed password from found user
+        if (userLogin.comparePasswords(userLogin.password, user.password)) {
+          //update the password for the existing user with the future password
+          user.password = userLogin.generateHash(req.body.future);
+          console.log('### user', user);
+          user.save(function(err, data) {});
+          res.send('Password has been changed');
+        } else {
+          //if user is found, but password doesn't match
+          console.log('Incorrect Password')
+          res.send('Nope');
+        }
+      }
+    })
+  },
+
   // @req.body expects an user _id for reference to Trips schema
   alltrips: function(req, res) {
     var tripArr;
-    console.log('requested by user', req.decoded.username);
     Trips.find({
         'userId': req.decoded.username
       })
@@ -135,5 +160,9 @@ module.exports = {
         res.status(403)
           .send('No trips found');
       })
+  },
+
+  getUser: function(req, res) {
+    res.send(req.decoded.username);
   }
 };

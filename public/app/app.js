@@ -48,10 +48,6 @@ angular.module('tp', [
         templateUrl: 'app/auth/logout.html',
         controller: 'AuthController'
       })
-      .when('/profile', {
-        templateUrl: 'app/profile/profile.html',
-        controller: 'AuthController'
-      })
       // For any unmatched url, redirect to users general trip list
       .otherwise({
         redirectTo: '/trips'

@@ -4,7 +4,7 @@ angular.module('app.services', [])
 /* Trips factory containing all trip related requests to server */
 .factory('Trips', function($http, $window) {
 
-  
+
   var trips = {}; // persistent storage of all trips for given user
   var user = $window.localStorage.getItem('com.tp.user'); // pulls the current user for the JWT
   var tripID = {}; // loads the current trip as separate storage object
@@ -24,11 +24,11 @@ angular.module('app.services', [])
       });
   };
 
-  
+
   allTrips(user); // populates trips object on instantiation
 
   /* fetches single trip matching tripID for a given user - called on my-trip/:id
-     page load 
+     page load
   */
   var accessTrip = function(tripID) {
     console.log('you called me');
@@ -46,7 +46,7 @@ angular.module('app.services', [])
      only called once the submit button is pressed on create trip page
      destination based on either dropped pin or autocompleted address in
      text input bar
-     returns newly created trip 
+     returns newly created trip
   */
   var newTrip = function(destination, startDate, coordinates) {
     return $http({
@@ -66,7 +66,7 @@ angular.module('app.services', [])
   };
 
   /* deletes a trip - called from trips page using either infowindow delete (on map)
-     or trash icon (in list), also called from my-trip page using delete button (pending) 
+     or trash icon (in list), also called from my-trip page using delete button (pending)
   */
   var removeTrip = function(target) {
     return $http({
@@ -80,11 +80,11 @@ angular.module('app.services', [])
         return results;
       });
   };
-  var requestAttractions = function (location) {
+  var requestAttractions = function(location) {
     return $http({
       method: 'GET',
       url: 'api/trips/yelp/' + location.replace(' ', '_'),
-    }).then(function (results) {
+    }).then(function(results) {
       console.log(results);
       return results;
     })
@@ -95,14 +95,16 @@ angular.module('app.services', [])
     return $http({
       method: 'POST',
       url: 'api/trips/yelp/overlay',
-      data: {location:location},
+      data: {
+        location: location
+      },
     });
   };
 
-  /* add point of interest to trip.  currently called from my-trip page by 
-     manual input of POI (not filtered) and on create-trip page with results 
-     pulled from google places library (to be migrated to my-trip page) 
-  */ 
+  /* add point of interest to trip.  currently called from my-trip page by
+     manual input of POI (not filtered) and on create-trip page with results
+     pulled from google places library (to be migrated to my-trip page)
+  */
 
   var addPOI = function(tripID, title, details) {
     var tripData = {
@@ -133,7 +135,7 @@ angular.module('app.services', [])
   /* someone please refactor me!!!!
      trip specific information shown on my-trip page
      used to add trip-specific information to trip instance in mongo
-     data is used to send email notifications in relevant trip-related 
+     data is used to send email notifications in relevant trip-related
      situations (reminders)
   */
   var addTrigger = function(tripID, string, value) {
@@ -185,8 +187,8 @@ angular.module('app.services', [])
 
 
 
-/* Auth factory containing all user/authentication related requests to server 
-   responsible for authenticating user on signin, and returning tokens 
+/* Auth factory containing all user/authentication related requests to server
+   responsible for authenticating user on signin, and returning tokens
    for authentication during site use while navigating site
 
    token is stored in localStorage as 'com.tp'
@@ -222,11 +224,23 @@ angular.module('app.services', [])
     return !!$window.localStorage.getItem('com.tp');
   };
 
-  /* removes token */ 
+  /* removes token */
   var signout = function() {
     $window.localStorage.removeItem('com.tp');
     $window.localStorage.removeItem('com.tp.user');
     $location.path('/logout');
+  };
+
+  /* changes user password */
+  var changePassword = function(oldPass, newPass) {
+    return $http({
+        method: 'POST',
+        url: '/api/users/change',
+        data: {prev: oldPass, future: newPass}
+      })
+      .then(function(resp) {
+        return resp.data;
+      });
   };
 
   /* deletes user from database - called on user profile page */
@@ -234,7 +248,7 @@ angular.module('app.services', [])
     console.log('services removing user')
     return $http({
         method: 'GET',
-        url: '/api/users/remove',
+        url: '/api/users/change',
       })
       .then(function() {
         $window.localStorage.removeItem('com.tp');
@@ -243,11 +257,23 @@ angular.module('app.services', [])
       });
   };
 
+  var getUser = function() {
+    return $http({
+        method: 'GET',
+        url: '/api/users/get',
+      })
+      .then(function(resp) {
+        return resp.data;
+      });
+  };
+
   return {
     signin: signin,
     signup: signup,
     isAuth: isAuth,
     signout: signout,
-    removeUser: removeUser
+    changePassword: changePassword,
+    removeUser: removeUser,
+    getUser: getUser
   };
 });

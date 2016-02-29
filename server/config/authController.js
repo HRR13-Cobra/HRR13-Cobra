@@ -11,7 +11,7 @@ module.exports = {
     if (token) {
       jwt.verify(token, secret, function(err, decoded) {
         if (err) {
-          console.error(err);
+          console.error('JWT Verification Error',err);
           return res.status(403).send(err);
         } else {
           req.decoded = decoded;
