@@ -51,20 +51,20 @@
         <button
           class="waves-effect waves-light btn amber darken-3"
           class="md-raised"
+          ng-click="getAttractions()"
+          >List Nearby
+        </button>
+        <p> </p>
+      </div> 
+      <div class="col s3">
+        <button
+          class="waves-effect waves-light btn amber darken-3"
+          class="md-raised"
           ng-click="quickAdd()"
           >Quick Add
         </button>
         <p> </p>
       </div>
-      <div class="col s3">
-        <button
-          class="waves-effect waves-light btn amber darken-3"
-          class="md-raised"
-          ng-click="getAttractions()"
-          >Find Attractions
-        </button>
-        <p> </p>
-      </div> 
       <div class="col s3">
         <button
           class="waves-effect waves-light btn amber darken-3"
@@ -78,17 +78,27 @@
   <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <h5 class="col s10"id="questionsID" ng-model="questions" ng-show="showQuestion">{{questions}}</h5>
     <div class="right-align">
+      <button ng-show="showQuestion" ng-click="next()"class="waves-light waves-effect btn amber darken-5 md-raised">Next Question</button> 
       <button ng-show="showQuestion" class="waves-light waves-effect btn amber darken-5 md-raised">N/A</button>
     </div>
     <div class="row">
     <!-- <div class="container" style="display: inline-block"> -->
       <div id="mapDiv" style="width:60%"class="col s5"></div>
-      <div class="col s3">
-        <div ng-repeat="marker in currentMarkerData" ng-click="selectPOI(marker.name)">
-        {{marker.name}} <img src={{marker.image_url}}>
+      <div class="col s4" id="poiList">
+        <div ng-model="showAdd" ng-mouseenter="showAdd = true" ng-mouseleave="showAdd = false"ng-repeat="marker in currentMarkerData" >
+        <img ng-mouseenter="syncInfoWindow(marker)" ng-mouseleave="leaveInfoWindow(marker)"src={{marker.image_url}}>
+        <button class="waves-light waves-effect btn amber darken-5 md-raised" ng-show="showAdd">x</button><br>
+        <span ng-mouseenter="style={color:'green'}"
+              ng-mouseleave="style={color:'black'}"
+              ng-style="style"
+              ng-click="openTab(marker.url)">{{marker.name}}</span><br>
+              <!-- TODO: save checked to trip -->
+        <input type="checkbox" ng-model="marker.infomap"id="{{marker.name}}" ng-click="setBounce(marker)">
+        <label for="{{marker.name}}">Add to trip</label>
         </div>
       </div>
     </div>
     <!-- </div> -->
   </div>
 </div>
+

@@ -26,7 +26,7 @@ exports.getOverlay = function (req, res) {
     yelp.search({
       bounds: req.body.location[0] + ',' + req.body.location[1] +
       '|' + req.body.location[2] + ',' + req.body.location[3],
-      sort: 2,
+      sort: 1,
       term: 'tourist attraction'
     })
     .then(function(data){
