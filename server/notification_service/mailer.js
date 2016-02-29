@@ -3,20 +3,21 @@ var sgTransport = require('nodemailer-sendgrid-transport');
 //var EmailTemplate = require('email-templates').Email.Template;
 var schedule = require('node-schedule');
 var mg = require('nodemailer-mailgun-transport');
+var config = require('./_config.js')
 
 module.exports = {
-  signupEmail: function(username){
+  signupEmail: function(username, apiKey, domain){
     var auth = {
       auth: {
-        api_key: 'key-d5f3c75b9660f61d5e0d22d401873be4',
-        domain: 'sandbox838378b8b1a243919bd401f6bbe55d2a.mailgun.org'
+        api_key: config.API_KEY,
+        domain: config.DOMAIN
       }
     }
-
+    
     var nodemailerMailgun = nodemailer.createTransport(mg(auth));
 
     nodemailerMailgun.sendMail({
-      from: '"Marco Polo" <your.trip.planner.co@sandbox838378b8b1a243919bd401f6bbe55d2a.mailgun.org>',
+      from: 'your.trip.planner.co@sandbox838378b8b1a243919bd401f6bbe55d2a.mailgun.org',
       to: username, // An array if you have multiple recipients.
       subject: 'Welcome to Trip Planner!!',
       // 'h:Reply-To': 'reply2this@company.com',
@@ -37,19 +38,19 @@ module.exports = {
     
   },
   
-  signinEmail: function(username){
+  signinEmail: function(username,apikey,domain){
     
     var auth = {
       auth: {
-        api_key: 'key-d5f3c75b9660f61d5e0d22d401873be4',
-        domain: 'sandbox838378b8b1a243919bd401f6bbe55d2a.mailgun.org'
+        api_key: config.API_KEY,
+        domain: config.DOMAIN
       }
     }
 
     var nodemailerMailgun = nodemailer.createTransport(mg(auth));
 
     nodemailerMailgun.sendMail({
-      from: '"Marco Polo" <your.trip.planner.co@sandbox838378b8b1a243919bd401f6bbe55d2a.mailgun.org>',
+      from: 'your.trip.planner.co@sandbox838378b8b1a243919bd401f6bbe55d2a.mailgun.org',
       to: username, // An array if you have multiple recipients.
       subject: 'Hey you!',
       // 'h:Reply-To': 'reply2this@company.com',
@@ -73,15 +74,15 @@ module.exports = {
   reminderEmail: function(username){
     var auth = {
       auth: {
-        api_key: 'key-d5f3c75b9660f61d5e0d22d401873be4',
-        domain: 'sandbox838378b8b1a243919bd401f6bbe55d2a.mailgun.org'
+        api_key: config.API_KEY,
+        domain: config.DOMAIN
       }
     }
 
     var nodemailerMailgun = nodemailer.createTransport(mg(auth));
 
     nodemailerMailgun.sendMail({
-      from: '"Marco Polo" <your.trip.planner.co@sandbox838378b8b1a243919bd401f6bbe55d2a.mailgun.org>',
+      from: 'your.trip.planner.co@sandbox838378b8b1a243919bd401f6bbe55d2a.mailgun.org',
       to: username, // An array if you have multiple recipients.
       subject: 'Booking Reminder!!!',
       // 'h:Reply-To': 'reply2this@company.com',
