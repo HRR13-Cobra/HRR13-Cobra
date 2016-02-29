@@ -16,8 +16,13 @@ module.exports = {
       // password: Users.generateHash(req.body.password),
     });
     newUser.password = newUser.generateHash(req.body.password);
-    // sends welcome email
-    // Email.signupEmail(newUser.username)
+
+    // newUser.salt = newUser.generateSalt(req.body);
+
+    //sends welcome email
+    Email.signupEmail(newUser.username)
+
+
     newUser.save(function(err, user) {
       if (err) {
         console.error(err);
@@ -38,7 +43,11 @@ module.exports = {
     });
     // TODO: will refactor into a promise
 
-    // Email.signinEmail(userLogin.username);
+
+    Email.signinEmail(userLogin.username);
+
+
+
     // Trips.find(function(err, trips){
     //   if(err){
     //     return console.log(err)
