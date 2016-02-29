@@ -17,7 +17,7 @@ module.exports = {
     var nodemailerMailgun = nodemailer.createTransport(mg(auth));
 
     nodemailerMailgun.sendMail({
-      from: 'your.trip.planner.co@sandbox838378b8b1a243919bd401f6bbe55d2a.mailgun.org',
+      from: config.FROM,
       to: username, // An array if you have multiple recipients.
       subject: 'Welcome to Trip Planner!!',
       // 'h:Reply-To': 'reply2this@company.com',
@@ -50,7 +50,7 @@ module.exports = {
     var nodemailerMailgun = nodemailer.createTransport(mg(auth));
 
     nodemailerMailgun.sendMail({
-      from: 'your.trip.planner.co@sandbox838378b8b1a243919bd401f6bbe55d2a.mailgun.org',
+      from: config.FROM,
       to: username, // An array if you have multiple recipients.
       subject: 'Hey you!',
       // 'h:Reply-To': 'reply2this@company.com',
@@ -82,7 +82,7 @@ module.exports = {
     var nodemailerMailgun = nodemailer.createTransport(mg(auth));
 
     nodemailerMailgun.sendMail({
-      from: 'your.trip.planner.co@sandbox838378b8b1a243919bd401f6bbe55d2a.mailgun.org',
+      from: config.FROM,
       to: username, // An array if you have multiple recipients.
       subject: 'Booking Reminder!!!',
       // 'h:Reply-To': 'reply2this@company.com',
