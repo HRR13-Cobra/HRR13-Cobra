@@ -7,25 +7,14 @@ angular.module('app.my-trip', [])
   $scope.geocoder = new google.maps.Geocoder();
   $scope.destination;
   $scope.marker = null;
+  // map markers
   $scope.currentMarkers = [];
+  // marker data from Yelp
   $scope.currentMarkerData = [];
   $scope.buttonTitle = 'hotel';
   $scope.nextQuestion;
   $scope.addedPOIS;
   /* reqests information about the current trip from the Trips factory */
-
-  // var questionBank = {
-  //   hotel: {
-  //     question: 'Please select a hotel below',
-  //     answer: null,
-  //   },
-  //   restaurant: {
-  //     question:'Please select a restaurant below',
-  //     answer: [],
-  //   },
-  //   hasBeenCalled: false,
-  // };
-
   // $scope.questions = questionBank['hotel'].question;
 
   var tripData = {
@@ -96,7 +85,7 @@ angular.module('app.my-trip', [])
 
   $scope.openTab = function(url) {
     console.log('url', url)
-    $window.open(url, '_blank');
+    window.open(url, '_blank');
   };
 
   // create map
@@ -128,6 +117,7 @@ angular.module('app.my-trip', [])
   };
 
   $scope.syncInfoWindow = function(marker) {
+    console.log($scope.currentMarkerData);
     var syncMarker = $scope.currentMarkers[$scope.currentMarkerData.indexOf(marker)];
     infowindow.setContent(marker.name);
     infowindow.open($scope.map, syncMarker);
@@ -166,9 +156,13 @@ angular.module('app.my-trip', [])
   };
 
   var displayMarkersFromYelp = function (array) {
+    clearMarkers();
       var coordinates;
       // TODO: pass in pure arrays
       // array.data.businesses.forEach(function(point) {
+      var pinColor = "FFFFFF";
+      var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor);
+
       array.forEach(function(point) {
         coordinates = {
           lat: point.location.coordinate.latitude,
@@ -178,9 +172,9 @@ angular.module('app.my-trip', [])
           map: $scope.map,
           position: coordinates,
           animation: google.maps.Animation.DROP,
+          icon: pinImage,
         });
 
-        $scope.map.setZoom(8);
         $scope.map.panTo(coordinates);
 
         assignInfoWindow(marker, point.name);
@@ -192,7 +186,7 @@ angular.module('app.my-trip', [])
 
   var clearMarkers = function () {
     $scope.currentMarkers.forEach(function (marker) {
-      marker.setMap(null);
+      if (!marker.animating) marker.setMap(null);
     });
   };
 
@@ -282,6 +276,7 @@ angular.module('app.my-trip', [])
   $scope.getAttractions = function (userInput) {
     clearMarkers();
     Trips.requestAttractions($scope.thisTrip.destination, userInput)
+
     .then(function (results) {
       if (!results.data.businesses.length){
         Materialize.toast('no results for '+ userInput +' found around ' + $scope.thisTrip.destination, 5000, 'rounded');

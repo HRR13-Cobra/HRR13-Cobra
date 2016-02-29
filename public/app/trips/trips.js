@@ -50,9 +50,16 @@ angular.module('app.trips', [])
     var infowindow = new google.maps.InfoWindow({
       content: '<a href="#/my-trip/' + info._id + '">' + info.destination + '</a><br>' +
         createContent(info),
+      disableAutoPan: true,
     });
-    marker.addListener('click', function() {
+    marker.addListener('mouseover', function() {
       infowindow.open(marker.get('map'), marker);
+    });
+     marker.addListener('mouseout', function() {
+      infowindow.close();
+    });
+     marker.addListener('click', function() {
+      window.location= '#/my-trip/' + info._id;
     });
   };
 

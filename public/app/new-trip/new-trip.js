@@ -148,30 +148,30 @@ angular.module('app.new-trip', [])
 
   };
 
-  // var displayMarkersFromYelp = function (array) {
-  //     var coordinates;
-  //     // TODO: pass in pure arrays
-  //     // array.data.businesses.forEach(function(point) {
-  //     array.forEach(function(point) {
-  //       coordinates = {
-  //         lat: point.location.coordinate.latitude,
-  //         lng: point.location.coordinate.longitude,
-  //       };
-  //       var marker = new google.maps.Marker({
-  //         map: $scope.map,
-  //         position: coordinates,
-  //         animation: google.maps.Animation.DROP,
-  //       });
 
-  //       $scope.map.setZoom(8);
-  //       $scope.map.panTo(coordinates);
+  var displayMarkersFromYelp = function (array) {
+      var coordinates;
+      // TODO: pass in pure arrays
+      // array.data.businesses.forEach(function(point) {
+      array.forEach(function(point) {
+      coordinates = {
+        lat: point.location.coordinate.latitude,
+        lng: point.location.coordinate.longitude,
+      };
+      var marker = new google.maps.Marker({
+        map: $scope.map,
+        position: coordinates,
+        animation: google.maps.Animation.DROP,
+      });
 
-  //       assignInfoWindow(marker, point.name);
-  //       $scope.currentMarkerData.push(point);
-  //       $scope.currentMarkers.push(marker);
-  //     });
-  //     // console.log('current markers: ', $scope.currentMarkers)
-  // };
+      $scope.map.panTo(coordinates);
+
+      assignInfoWindow(marker, point.name);
+      $scope.currentMarkerData.push(point);
+      $scope.currentMarkers.push(marker);
+      })
+      // console.log('current markers: ', $scope.currentMarkers)
+  }
 
   var input = (document.getElementById('destination'));
   var autocomplete = new google.maps.places.Autocomplete(input);

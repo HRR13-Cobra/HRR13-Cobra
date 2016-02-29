@@ -111,7 +111,7 @@ angular.module('app.services', [])
     var tripData = {
       _id: tripID,
       title: title,
-      details: details,
+      details: jQuery.parseHTML(details),
     };
     return $http({
       method: 'PUT',
