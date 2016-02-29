@@ -45,7 +45,6 @@ angular.module('app.auth', [])
   $scope.getUser = function() {
     Auth.getUser()
       .then(function(data) {
-        console.log(data);
         $scope.user = data;
       });
   };
@@ -74,5 +73,7 @@ angular.module('app.auth', [])
     Auth.removeUser()
   }
 
-  $scope.getUser();
+  if ($window.localStorage.getItem('com.tp.user')) {
+    $scope.getUser();
+  }
 });

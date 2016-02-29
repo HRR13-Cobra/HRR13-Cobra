@@ -24,7 +24,6 @@ angular.module('app.services', [])
       });
   };
 
-
   allTrips(user); // populates trips object on instantiation
 
   /* fetches single trip matching tripID for a given user - called on my-trip/:id
@@ -88,8 +87,8 @@ angular.module('app.services', [])
     }).then(function (results) {
       console.log(results);
       return results;
-    })
-  }
+    });
+  };
 
   var searchOverlay = function(location) {
     console.log(location.toString());
@@ -131,7 +130,7 @@ angular.module('app.services', [])
       url: '/api/trips/poi',
       data: tripData
     });
-  }
+  };
 
   /* someone please refactor me!!!!
      trip specific information shown on my-trip page
@@ -145,25 +144,25 @@ angular.module('app.services', [])
       tripData = {
         _id: tripID,
         flying: value
-      }
+      };
     }
     if (string === 'leavingCountry') {
       tripData = {
         _id: tripID,
         leavingCountry: value
-      }
+      };
     }
     if (string === 'travelingAlone') {
       tripData = {
         _id: tripID,
         travelingAlone: value
-      }
+      };
     }
     if (string === 'accomodations') {
       tripData = {
         _id: tripID,
         accomodations: value
-      }
+      };
     }
     return $http({
       method: 'PUT',
@@ -237,7 +236,10 @@ angular.module('app.services', [])
     return $http({
         method: 'POST',
         url: '/api/users/change',
-        data: {prev: oldPass, future: newPass}
+        data: {
+          prev: oldPass,
+          future: newPass
+        }
       })
       .then(function(resp) {
         return resp.data;
@@ -246,10 +248,9 @@ angular.module('app.services', [])
 
   /* deletes user from database - called on user profile page */
   var removeUser = function() {
-    console.log('services removing user')
     return $http({
         method: 'GET',
-        url: '/api/users/change',
+        url: '/api/users/remove',
       })
       .then(function() {
         $window.localStorage.removeItem('com.tp');

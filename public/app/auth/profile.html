@@ -31,13 +31,13 @@
           <span class="card-title">Change Password</span>
           <p>Please enter your current password and your new password.</p>
           <div class="input-field">
-            <input class="placeholderColor" placeholder="Old Password" name="oldPassword" type="oldPassword" ng-model="user.oldPassword" ng-minlength="8" required>
+            <input class="placeholderColor" placeholder="Old Password" name="oldPassword" type="password" ng-model="oldPassword" required>
           </div>
           <div class="input-field">
-            <input class="placeholderColor" placeholder="New Password" name="newPassword" type="newPassword" ng-model="user.newPassword" ng-minlength="8" required>
+            <input class="placeholderColor" placeholder="New Password" name="newPassword" type="password" ng-model="newPassword" required>
           </div>
           <div class="input-field">
-            <button class="waves-effect waves-light btn amber darken-3" type="submit" ng-click="changePassword(user.oldPassword, user.newPassword)">Update</button>
+            <button class="waves-effect waves-light btn amber darken-3" type="submit" ng-click="changePassword(oldPassword, newPassword)">Update</button>
           </div>
         </div>
       </div>
