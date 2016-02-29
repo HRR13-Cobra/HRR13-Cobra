@@ -19,6 +19,10 @@ angular.module('app.trips', [])
       });
   };
 
+  $scope.hover = function(trip) {
+    return trip.showDelete = ! trip.showDelete;
+  };
+
   var createContent = function(info) {
     var string = '';
     if (info.POI.length > 0) {
