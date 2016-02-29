@@ -287,6 +287,7 @@ angular.module('app.my-trip', [])
     .catch(function(err){
       console.error(err);
     });
+
   };  
 
   // $scope.quickAdd = function () {
@@ -403,6 +404,5 @@ angular.module('app.my-trip', [])
     Sights.editing=false;
     $scope.editedSights = null;
   };
-
 
 });
