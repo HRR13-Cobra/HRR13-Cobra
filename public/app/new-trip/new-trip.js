@@ -8,7 +8,6 @@ angular.module('app.new-trip', [])
   $(document).ready(function () {
     $('#locationForm').keypress(function (event) {
       if (event.keyCode === 13 ) {
-        console.log('preventing');
         event.preventDefault();
       }
     });
@@ -47,7 +46,7 @@ angular.module('app.new-trip', [])
 
     $scope.marker = marker; // sets marker on scope, so we have access to info and can remove
 
-    $scope.map = new google.maps.Map(document.getElementById("mapDiv"), mapOptions);
+    $scope.map = new google.maps.Map(document.getElementById('mapDiv'), mapOptions);
     $scope.destination;
     $scope.marker = null;
 
@@ -62,7 +61,7 @@ angular.module('app.new-trip', [])
       $scope.marker.infowindow.open(marker.get('map'), marker);
     });
 
-    document.getElementById("destination").value = info.destination; //uses jQuery to set the value of the destination in the box
+    document.getElementById('destination').value = info.destination; //uses jQuery to set the value of the destination in the box
     $('#destination').scope().$apply(); // applies for live-update (angular-materialize bug-fix)
 
   };
@@ -93,7 +92,7 @@ angular.module('app.new-trip', [])
     var place = autocomplete.getPlace();
 
     if (!place.geometry) {
-      Materialize.toast("Autocomplete's returned place contains no geometry" + $scope.thisTrip.destination, 5000, 'rounded');
+      Materialize.toast('Autocomplete\'s returned place contains no geometry' + $scope.thisTrip.destination, 5000, 'rounded');
       return;
     }
 
@@ -138,9 +137,9 @@ angular.module('app.new-trip', [])
     };
 
     /* retrieves location information from google via get request based on dropped pin */
-    $.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + e.latLng.lat() + "," + e.latLng.lng() + "&key=AIzaSyCzyMnMsFCydO-sFVMocOcTLeGh7Q7csKc", function(data) {
+    $.get('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + e.latLng.lat() + ',' + e.latLng.lng() + '&key=', function(data) {
       if (data.status === 'ZERO_RESULTS'){ // if google cannot return a location......................
-        Materialize.toast("Please click on land!" + $scope.thisTrip.destination, 5000, 'rounded'); // displays alert to user
+        Materialize.toast('Please click on land!' + $scope.thisTrip.destination, 5000, 'rounded'); // displays alert to user
       } else {
         info.coordinates = data.results[0].geometry.location;
         info.destination = data.results[1].formatted_address;
