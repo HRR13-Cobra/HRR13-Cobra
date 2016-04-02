@@ -1,9 +1,9 @@
 angular.module('app.new-trip', [])
 
 .controller('new-tripController', function ($scope, $location, $window, Trips, Auth) {
-  
-  /* disables submit on pressing enter button 
-     (must click submit button) 
+
+  /* disables submit on pressing enter button
+     (must click submit button)
   */
   $(document).ready(function () {
     $('#locationForm').keypress(function (event) {
@@ -14,7 +14,7 @@ angular.module('app.new-trip', [])
     });
   });
 
-  /* 
+  /*
     specifications for map created directly below
   */
   var mapOptions = {
@@ -52,7 +52,7 @@ angular.module('app.new-trip', [])
     $scope.marker = null;
 
     /* adds info window on marker which displays location informition
-       opens when marker is clicked 
+       opens when marker is clicked
     */
     $scope.marker.infowindow = new google.maps.InfoWindow({
       content: info.destination
@@ -68,25 +68,25 @@ angular.module('app.new-trip', [])
   };
 
   var input = (document.getElementById('destination'));
-  var autocomplete = new google.maps.places.Autocomplete(input); // creates 
+  var autocomplete = new google.maps.places.Autocomplete(input); // creates
   autocomplete.bindTo('bounds', $scope.map);
 
-  
+
   // var marker = new google.maps.Marker({
   //   map: $scope.map,
   //   anchorPoint: new google.maps.Point(0, -29)
   // });
 
 
-  /* map listens for a change in input box ($scope.destination), renders 
+  /* map listens for a change in input box ($scope.destination), renders
      makes call to create marker
      retrieves location information from google based on dropped pin
   */
   autocomplete.addListener('place_changed', function() {
 
-    if ($scope.marker) { 
+    if ($scope.marker) {
       $scope.marker.infowindow.close();
-      $scope.marker.setMap(null); 
+      $scope.marker.setMap(null);
     }
     marker.setVisible(false);
 
@@ -96,7 +96,7 @@ angular.module('app.new-trip', [])
       Materialize.toast("Autocomplete's returned place contains no geometry" + $scope.thisTrip.destination, 5000, 'rounded');
       return;
     }
-    
+
     if (place.geometry.viewport) { // If the place has a geometry, then present it on a map.
       $scope.map.fitBounds(place.geometry.viewport);
     } else {
@@ -119,10 +119,10 @@ angular.module('app.new-trip', [])
     info.destination = place.formatted_address;
     createMarker(info);
     $scope.info = info;
-    $scope.destinaiton = info.destination;    
+    $scope.destinaiton = info.destination;
   });
 
-  /* map listens for a click and renders a marker and returns corresponding address 
+  /* map listens for a click and renders a marker and returns corresponding address
      retrieves location information from google based on dropped pin
   */
   $scope.map.addListener('click', function(e) {
@@ -138,13 +138,13 @@ angular.module('app.new-trip', [])
     };
 
     /* retrieves location information from google via get request based on dropped pin */
-    $.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + e.latLng.lat() + "," + e.latLng.lng() + "&key=AIzaSyCXPMP0KsMOdfwehnmOUwu-W3VOK92CkwI", function(data) {
+    $.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + e.latLng.lat() + "," + e.latLng.lng() + "&key=AIzaSyCzyMnMsFCydO-sFVMocOcTLeGh7Q7csKc", function(data) {
       if (data.status === 'ZERO_RESULTS'){ // if google cannot return a location......................
         Materialize.toast("Please click on land!" + $scope.thisTrip.destination, 5000, 'rounded'); // displays alert to user
       } else {
         info.coordinates = data.results[0].geometry.location;
         info.destination = data.results[1].formatted_address;
-        info.googledata = data; // 
+        info.googledata = data; //
         createMarker(info);
         $scope.info = info;
         $scope.destination = info.destination;
@@ -155,7 +155,7 @@ angular.module('app.new-trip', [])
       }
     });
   });
-  
+
   /*
      creates a new trip with the last location input by user
      redirects to newly created trip (my-trip view)
