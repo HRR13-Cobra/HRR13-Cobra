@@ -10,6 +10,9 @@
         <a href="#/trips">
           My Trips</a>
       </li>
+      <li>
+        <a href="#/profile">Profile</a>
+      </li>
       <li ng-click="signout()">
         <a>Signout</a>
       </li>
@@ -22,13 +25,8 @@
     <form class="col s12" id="locationForm" name='locationForm'>
       <div class="col s6">
         <!-- Desination -->
-        <h4>When does your trip start?</h4>
-        <label>Where are you going?</label><input
-          type='text'
-          class="controls"
-          id="destination"
-          name="destination"
-          ng-model="destination">
+        <h4>Where are you headed?</h4>
+        <label>i.e. New York, Hawaii...</label><input type='text' class="controls" id="destination" name="destination" ng-model="destination">
       </div>
       <div class="col s6">
         <!-- Departure date -->
@@ -36,19 +34,64 @@
         <label>(Optional)</label>
         <input type="date" ng-model="startDate" class="datepicker">
       </div>
-      <div class="col s12">
+      <div class="col s3">
+        <button class="waves-effect waves-light btn amber darken-3" class="md-raised" type="submit" name="action" ng-disabled="!destination" ng-click="createTrip()">Submit
+        </button>
+        <p></p>
+      </div>
+      <div id="mapDiv"></div>
+    </form>
+    <!--       <div class="col s3">
         <button
           class="waves-effect waves-light btn amber darken-3"
           class="md-raised"
-          type="submit"
-          name="action"
-          ng-disabled="!destination"
-          ng-click="createTrip()">Submit
+          ng-click="getAttractions()"
+          >List Nearby
         </button>
         <p> </p>
       </div>
-    </div>
-  </form>
+      <div class="col s3">
+        <button
+          class="waves-effect waves-light btn amber darken-3"
+          class="md-raised"
+          ng-click="quickAdd()"
+          >Quick Add
+        </button>
+        <p> </p>
+      </div>
+      <div class="col s3">
+        <button
+          class="waves-effect waves-light btn amber darken-3"
+          class="md-raised"
+          ng-click="addDay()"
+          >Add a day
+        </button>
+        <p> </p>
+      </div>
+    </form>
   <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-  <div id="mapDiv"></div>
+    <h5 class="col s10"id="questionsID" ng-model="questions" ng-show="showQuestion">{{questions}}</h5>
+    <div class="right-align">
+      <button ng-show="showQuestion" ng-click="next()"class="waves-light waves-effect btn amber darken-5 md-raised">Next Question</button>
+      <button ng-show="showQuestion" class="waves-light waves-effect btn amber darken-5 md-raised">N/A</button>
+    </div>
+    <div class="row"> -->
+    <!-- <div class="container" style="display: inline-block"> -->
+    <!--  <div id="mapDiv" style="width:60%"class="col s5"></div>
+      <div class="col s4" id="poiList">
+        <div ng-model="showAdd" ng-mouseenter="showAdd = true" ng-mouseleave="showAdd = false"ng-repeat="marker in currentMarkerData" >
+        <img ng-mouseenter="syncInfoWindow(marker)" ng-mouseleave="leaveInfoWindow(marker)"src={{marker.image_url}}>
+        <button class="waves-light waves-effect btn amber darken-5 md-raised" ng-show="showAdd">x</button><br>
+        <span ng-mouseenter="style={color:'green'}"
+              ng-mouseleave="style={color:'black'}"
+              ng-style="style"
+              ng-click="openTab(marker.url)">{{marker.name}}</span><br> -->
+    <!-- TODO: save checked to trip -->
+    <!--         <input type="checkbox" ng-model="marker.infomap"id="{{marker.name}}" ng-click="setBounce(marker)">
+        <label for="{{marker.name}}">Add to trip</label>
+        </div>
+      </div>
+    </div> -->
+    <!-- </div> -->
+  </div>
 </div>

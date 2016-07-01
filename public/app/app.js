@@ -6,7 +6,7 @@ angular.module('tp', [
     'app.trips',
     'app.auth'
   ])
-  .config(function($httpProvider, $routeProvider) {
+  .config(function ($httpProvider, $routeProvider) {
     // Now set up the routes
     $routeProvider
       .when('/trips', {
@@ -48,10 +48,6 @@ angular.module('tp', [
         templateUrl: 'app/auth/logout.html',
         controller: 'AuthController'
       })
-      .when('/profile', {
-        templateUrl: 'app/profile/profile.html',
-        controller: 'AuthController'
-      })
       // For any unmatched url, redirect to users general trip list
       .otherwise({
         redirectTo: '/trips'
@@ -60,13 +56,13 @@ angular.module('tp', [
     // of interceptors. Think of it like middleware for your ajax calls
     $httpProvider.interceptors.push('AttachTokens');
   })
-  .factory('AttachTokens', function($window) {
+  .factory('AttachTokens', function ($window) {
     // this is an $httpInterceptor
     // its job is to stop all out going request
     // then look in local storage and find the user's token
     // then add it to the header so the server can validate the request
     var attach = {
-      request: function(object) {
+      request: function (object) {
         var jwt = $window.localStorage.getItem('com.tp');
         if (jwt) {
           object.headers['x-access-token'] = jwt;
@@ -77,7 +73,7 @@ angular.module('tp', [
     };
     return attach;
   })
-  .run(function($rootScope, $location, Auth) {
+  .run(function ($rootScope, $location, Auth) {
     // here inside the run phase of angular, our services and controllers
     // have just been registered and our app is ready
     // however, we want to make sure the user is authorized
@@ -85,7 +81,7 @@ angular.module('tp', [
     // when it does change routes, we then look for the token in localstorage
     // and send that token to the server to see if it is a real user or hasn't expired
     // if it's not valid, we then redirect back to signin/signup
-    $rootScope.$on('$routeChangeStart', function(evt, next, current) {
+    $rootScope.$on('$routeChangeStart', function (evt, next, current) {
       if (next.$$route && next.$$route.authenticate && !Auth.isAuth()) {
         $location.path('/login');
       }

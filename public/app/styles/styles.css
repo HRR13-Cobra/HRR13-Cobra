@@ -1,46 +1,41 @@
-h1{
+h1 {
   color: #006064;
 }
 form {
   width: 340px;
   margin: 60px auto;
   padding: 24px;
-  box-shadow: 2px 2px 22px rgba(0,0,0,0.1);
+  box-shadow: 2px 2px 22px rgba(0, 0, 0, 0.1);
   background: transparent;
 }
-
 #signin, #signup {
   color: #006064;
 }
-#signin{
+#signin {
   background-image: url('background.jpg');
   background-repeat: no-repeat;
   position: fixed;
   top: 64;
   left: 0;
-
   min-width: 100%;
   min-height: 100%;
 }
-#signup{
+#signup {
   background-image: url('background.jpg');
   background-repeat: no-repeat;
   position: fixed;
   top: 64;
   left: 0;
-
   min-width: 100%;
   min-height: 100%;
 }
-
-.error{
+.error {
   font-size: 14px;
   color: #e65100;
 }
-
 #upcoming, #previous {
-  float:left;
-  width:400px;
+  float: left;
+  width: 400px;
 }
 #previous ul li:hover, #upcoming ul li:hover {
   background-color: #fff3e0;
@@ -57,17 +52,20 @@ a:hover {
 .placeholderColor::-webkit-input-placeholder {
   color: grey darken-3;
 }
-.mapContainer{
+.mapContainer {
   width: 80%;
-  horizonta center;
+  horizontal center;
 }
-.clearBoth{
+.clearBoth {
   clear: both;
 }
 #mapDiv {
   vertical-align: top;
   float: right;
-  height:600px;
+  height: 600px;
   width: 100%;
 }
-
+.scroll {
+  max-height: 600px;
+  overflow-y: scroll;
+}

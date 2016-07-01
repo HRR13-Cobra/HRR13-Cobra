@@ -10,81 +10,101 @@
         <a href="#/trips">
           My Trips</a>
       </li>
+      <li>
+        <a href="#/profile">Profile</a>
+      </li>
       <li ng-click="signout()">
         <a>Signout</a>
       </li>
     </ul>
   </div>
 </nav>
+
 <div class="container">
-  <div>
+  <div class="row">
     <h2>My Trip to
       {{ thisTrip.destination }}</h2>
     <!-- Pre Trip Checklist -->
-    <h4>Pre-Trip ToDo List</h4>
-    <form name="checklist">
-      <div>
-        <input
-          type="checkbox"
-          id="isflying"
-          ng-model="flying"
-          ng-change="triggerCheck('flying', flying)"
-          ng-checked="thisTrip.flying == true">
-        <label for="isflying">Are you flying?</label>
-        <input
-          type="checkbox"
-          id="isleavingCountry"
-          ng-model="leavingCountry"
-          ng-change="triggerCheck('leavingCountry', leavingCountry)"
-          ng-checked="thisTrip.leavingCountry == true">
-        <label for="isleavingCountry">Are you leaving the country?</label>
-        <input
-          type="checkbox"
-          id="istravelingAlone"
-          ng-model="travelingAlone"
-          ng-change="triggerCheck('travelingAlone', travelingAlone)"
-          ng-checked="thisTrip.travelingAlone == true">
-        <label for="istravelingAlone">Are you traveling with someone?</label>
-        <input
-          type="checkbox"
-          id="isaccomodations"
-          ng-model="accomodations"
-          ng-change="triggerCheck('accomodations', accomodations)"
-          ng-checked="thisTrip.accomodations == true">
-        <label for="isaccomodations">Have you reserved accomodations?</label>
+    <!-- <div id='mapDiv'></div> -->
+    <button class="waves-effect waves-light btn amber darken-3" class="md-raised" ng-click="savePage()">Save changes
+    </button>
+  </div>
+  <div class="row">
+    <div id="nearby" name='nearbybuttons'>
+      <input type='text' class="command col s9" id="userSearchInput" name="userSearchInput" ng-model="userSearchInput" placeholder="Find a room, resturants, and other places near your destination!">
+      <div class="col s1"></div>
+      <div class="col s3">
+        <button class="waves-effect waves-light btn amber darken-3" class="md-raised" ng-click="getAttractions(userSearchInput)">Search Nearby
+        </button>
       </div>
-    </form>
-    <!--Places to Visit-->
-    <div class="row">
-      <div class="col s8 offset-s2">
-        <h4>See The Sights</h4>
+      <p></p>
+    </div>
+    <p></p>
+  </div>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+  <h5 class="col s10" id="questionsID" ng-model="questions" ng-show="showQuestion">{{questions}}</h5>
+  <div class="right-align">
+    <button ng-show="showQuestion" ng-click="next()" class="waves-light waves-effect btn amber darken-5 md-raised">Next Question</button>
+    <button ng-show="showQuestion" class="waves-light waves-effect btn amber darken-5 md-raised">N/A</button>
+  </div>
+  <div class="row">
+    <div id="mapDiv" style="width:60%" class="col s5"></div>
+    <div class="col s4" id="poiList">
+      <div class="scroll">
+        <div ng-model="showAdd" ng-mouseenter="showAdd = true" ng-mouseleave="showAdd = false" ng-repeat="marker in currentMarkerData">
+          <img ng-mouseenter="syncInfoWindow(marker)" ng-mouseleave="leaveInfoWindow(marker)" src={{marker.image_url}}>
+          <span ng-mouseenter="style={color:'green'}" ng-mouseleave="style={color:'black'}" ng-style="style" ng-click="openTab(marker.url)">{{marker.name}}</span><br>
+          <input type="checkbox" ng-model="marker.selected" id="{{marker.name}}" ng-click="selectMarker(marker)">
+          <label for="{{marker.name}}">Add to trip</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col s12">
+      <div class="col s6">
+        <h4>ToDo List</h4>
+        <form name="checklist">
+          <div>
+            <input type="checkbox" id="isflying" ng-model="flying" ng-change="triggerCheck('flying', flying)" ng-checked="thisTrip.flying == true">
+            <label for="isflying">Are you flying?</label>
+            <input type="checkbox" id="isleavingCountry" ng-model="leavingCountry" ng-change="triggerCheck('leavingCountry', leavingCountry)" ng-checked="thisTrip.leavingCountry == true">
+            <label for="isleavingCountry">Are you leaving the country?</label>
+            <input type="checkbox" id="istravelingAlone" ng-model="travelingAlone" ng-change="triggerCheck('travelingAlone', travelingAlone)" ng-checked="thisTrip.travelingAlone == true">
+            <label for="istravelingAlone">Are you traveling with someone?</label>
+            <input type="checkbox" id="isaccomodations" ng-model="accomodations" ng-change="triggerCheck('accomodations', accomodations)" ng-checked="thisTrip.accomodations == true">
+            <label for="isaccomodations">Have you reserved accomodations?</label>
+          </div>
+        </form>
+      </div>
+      <!--Places to Visit-->
+      <div class="col s6">
+        <h4>Notes</h4>
         <form>
           <fieldset>
-            <input
-              placeholder="Something To See"
-              type="text"
-              class="input-field"
-              ng-model="POI_title">
-            <textarea
-              class="materialize-textarea"
-              placeholder="Some details..."
-              ng-model="POI_details"></textarea>
+            <input placeholder="Something To See" type="text" class="input-field" ng-model="POI_title">
+            <textarea class="materialize-textarea" placeholder="Some details..." ng-model="POI_details"></textarea>
           </fieldset>
-          <button
-            class="waves-effect waves-light btn amber darken-3"
-            type="submit"
-            ng-click="addPOI(POI_title, POI_details)">Add Event</button>
+          <button class="waves-effect waves-light btn amber darken-3" type="submit" ng-click="addPOI(POI_title, {notes:POI_details})">Add Event</button>
         </form>
       </div>
     </div>
-    <!-- Render all Points of Interest from the Trip Array -->
-    <div class="row">
-      <div class="col s12 m6" ng-repeat="sight in thisTrip.POI">
-        <div class="card orange lighten-5">
-          <div class="card-content black-text">
-            <span class="card-title">{{sight.title}}</span>
-            <p>{{sight.details}}</p>
-          </div>
+  </div>
+  <!-- Render all Points of Interest from the Trip Array -->
+  <div class="row">
+    <div class="col s12 m6" ng-repeat="sight in thisTrip.POI">
+      <div class="card orange lighten-5" ng-dblclick="startEditing(sight);">
+        <div class="card-content black-text">
+          <img ng-src='{{sight.details.imgUrl}}'/>
+          <span ng-hide="sight.editing" class="card-title">{{sight.title}}</span><br>
+          <p ng-hide="sight.editing">{{sight.details.address[0]}}</p>
+          <h4 ng-hide="sight.editing" class="card-title">{{sight.details.notes}}</h4>
+          <a target="_blank" href="{{sight.details.yelpUrl}}">Yelp</a>
+          <form ng-show="sight.editing" ng-submit="sight.title">
+            <input ng-model="sight.title" ng-blur="doneEditing(sight)" ng-focus="sight == editedSight">
+            <input ng-model="sight.details.notes" ng-blur="doneEditing(sight)" ng-focus="sight == editedSight">
+          </form>
         </div>
       </div>
     </div>
