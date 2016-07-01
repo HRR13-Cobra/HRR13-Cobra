@@ -1,38 +1,38 @@
-
+<!DOCTYPE html>
 <html ng-app="tp">
 
-  <head>
-    <meta charset="utf-8"/>
-    <title>Trip Planner</title>
-    <!-- Compiled and minified materialize.css and css style sheet-->
-    <link rel="stylesheet" href="app/styles/styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-  </head>
+<head>
+  <meta charset="utf-8" />
+  <title>Trip Planner</title>
+  <!-- Compiled and minified materialize.css and css style sheet-->
+  <link rel="stylesheet" href="app/styles/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+</head>
 
-  <body>
-    <div id="content">
-      <!-- SAP Views -->
-      <div ng-view></div>
-    </div>
+<body>
+  <div id="content">
+    <!-- SAP Views -->
+    <div ng-view></div>
+  </div>
 
-    <!-- Compiled and minified JavaScript -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-route.min.js"></script>
-    <script src="https://cdn.rawgit.com/auth0/angular-jwt/master/dist/angular-jwt.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-route.min.js"></script>
+  <script src="https://cdn.rawgit.com/auth0/angular-jwt/master/dist/angular-jwt.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
 
-    <!-- Google Maps -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=" + "&libraries=places,drawing"></script>
+  <!-- Google Maps -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=" + "&libraries=places,drawing"></script>
 
-    <!-- Site Functionality -->
-    <script src="app/app.js"></script>
-    <script src="app/factory/services.js"></script>
-    <script src="app/new-trip/new-trip.js"></script>
-    <script src="app/trips/trips.js"></script>
-    <script src="app/my-trip/my-trip.js"></script>
-    <script src="app/auth/auth.js"></script>
-  </body>
+  <!-- Site Functionality -->
+  <script src="app/app.js"></script>
+  <script src="app/factory/services.js"></script>
+  <script src="app/new-trip/new-trip.js"></script>
+  <script src="app/trips/trips.js"></script>
+  <script src="app/my-trip/my-trip.js"></script>
+  <script src="app/auth/auth.js"></script>
+</body>
 
 </html>
